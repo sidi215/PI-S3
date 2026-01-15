@@ -236,3 +236,9 @@ yarn-error.log*
 .env*.local
 .env
 .vercel
+
+
+
+# Ignore the dataset
+server/ai_service/training/dataset/
+server/ai_service/app/models/*.h5

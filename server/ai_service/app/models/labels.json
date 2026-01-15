@@ -1,0 +1,19 @@
+{
+  "0": "Tomato Healthy",
+  "1": "Tomato Early Blight",
+  "2": "Tomato Late Blight",
+  "3": "Tomato Septoria Leaf Spot",
+  "4": "Tomato Bacterial Spot",
+  "5": "Tomato Leaf Mold",
+  "6": "Tomato Target Spot",
+  "7": "Tomato Spider Mites",
+  "8": "Tomato Yellow Leaf Curl Virus",
+  "9": "Tomato Mosaic Virus",
+
+  "10": "Potato Healthy",
+  "11": "Potato Early Blight",
+  "12": "Potato Late Blight",
+
+  "13": "Pepper Healthy",
+  "14": "Pepper Bacterial Spot"
+}
