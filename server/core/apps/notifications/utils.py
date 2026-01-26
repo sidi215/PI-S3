@@ -7,41 +7,50 @@ import json
 
 from .models import Notification, NotificationPreference
 
+
 class NotificationService:
     def __init__(self):
         self.email_backend = self._get_email_backend()
         self.push_service = self._get_push_service()
-    
-    def send_notification(self, user, notification_type, title, message, 
-                         related_model=None, related_id=None, data=None):
+
+    def send_notification(
+        self,
+        user,
+        notification_type,
+        title,
+        message,
+        related_model=None,
+        related_id=None,
+        data=None,
+    ):
         """Send notification through appropriate channels"""
-        
+
         # Get user preferences
         try:
             preferences = user.notification_preferences
         except NotificationPreference.DoesNotExist:
             preferences = NotificationPreference.objects.create(user=user)
-        
+
         # Determine channels
         channels = []
-        
-        if notification_type == 'welcome':
-            channels = ['email']
-        elif notification_type.startswith('order_'):
+
+        if notification_type == "welcome":
+            channels = ["email"]
+        elif notification_type.startswith("order_"):
             if preferences.email_order_updates:
-                channels.append('email')
+                channels.append("email")
             if preferences.push_order_updates:
-                channels.append('push')
-        elif notification_type == 'new_message':
+                channels.append("push")
+        elif notification_type == "new_message":
             if preferences.push_new_message:
-                channels.append('push')
-        elif notification_type == 'weather_alert':
+                channels.append("push")
+        elif notification_type == "weather_alert":
             if preferences.push_weather_alerts:
-                channels.append('push')
-                channels.append('in_app')
+                channels.append("push")
+                channels.append("in_app")
         else:
-            channels = ['in_app']
-        
+            channels = ["in_app"]
+
         # Create notification record
         notification = Notification.objects.create(
             user=user,
@@ -52,22 +61,22 @@ class NotificationService:
             related_model=related_model,
             related_id=related_id,
             data=data or {},
-            is_sent=False
+            is_sent=False,
         )
-        
+
         # Send through channels
         for channel in channels:
-            if channel == 'email':
+            if channel == "email":
                 self._send_email(user, notification)
-            elif channel == 'push':
+            elif channel == "push":
                 self._send_push(user, notification)
-            elif channel == 'in_app':
+            elif channel == "in_app":
                 # In-app notifications are automatically available
                 pass
-        
+
         notification.mark_as_sent()
         return notification
-    
+
     def _send_email(self, user, notification):
         """Send email notification"""
         try:
@@ -83,55 +92,57 @@ class NotificationService:
         except Exception as e:
             print(f"Failed to send email: {e}")
             return False
-    
+
     def _send_push(self, user, notification):
         """Send push notification"""
         # Integrate with Firebase Cloud Messaging or similar
         # This is a placeholder implementation
-        
-        if not hasattr(user, 'device_tokens'):
+
+        if not hasattr(user, "device_tokens"):
             return False
-        
+
         device_tokens = user.device_tokens.all()
         if not device_tokens:
             return False
-        
+
         try:
             # Firebase Cloud Messaging
-            fcm_url = 'https://fcm.googleapis.com/fcm/send'
+            fcm_url = "https://fcm.googleapis.com/fcm/send"
             headers = {
-                'Authorization': f'key={settings.FCM_SERVER_KEY}',
-                'Content-Type': 'application/json'
+                "Authorization": f"key={settings.FCM_SERVER_KEY}",
+                "Content-Type": "application/json",
             }
-            
+
             for device in device_tokens:
                 payload = {
-                    'to': device.token,
-                    'notification': {
-                        'title': notification.title,
-                        'body': notification.message,
-                        'sound': 'default'
+                    "to": device.token,
+                    "notification": {
+                        "title": notification.title,
+                        "body": notification.message,
+                        "sound": "default",
                     },
-                    'data': {
-                        'notification_id': str(notification.id),
-                        'type': notification.notification_type,
-                        'related_model': notification.related_model,
-                        'related_id': notification.related_id,
-                        'click_action': 'FLUTTER_NOTIFICATION_CLICK'
-                    }
+                    "data": {
+                        "notification_id": str(notification.id),
+                        "type": notification.notification_type,
+                        "related_model": notification.related_model,
+                        "related_id": notification.related_id,
+                        "click_action": "FLUTTER_NOTIFICATION_CLICK",
+                    },
                 }
-                
-                response = requests.post(fcm_url, headers=headers, data=json.dumps(payload))
-                
+
+                response = requests.post(
+                    fcm_url, headers=headers, data=json.dumps(payload)
+                )
+
                 if response.status_code != 200:
                     print(f"FCM error: {response.text}")
-            
+
             return True
-            
+
         except Exception as e:
             print(f"Failed to send push: {e}")
             return False
-    
+
     def _create_html_email(self, notification):
         """Create HTML email template"""
         template = f"""
@@ -171,36 +182,38 @@ class NotificationService:
         </html>
         """
         return template
-    
+
     def _get_email_action(self, notification):
         """Get action button for email based on notification type"""
         actions = {
-            'new_order': f'<p><a href="{settings.FRONTEND_URL}/orders/{notification.related_id}" class="button">Voir la commande</a></p>',
-            'order_accepted': f'<p><a href="{settings.FRONTEND_URL}/orders/{notification.related_id}" class="button">Suivre la commande</a></p>',
-            'order_shipped': f'<p><a href="{settings.FRONTEND_URL}/orders/{notification.related_id}" class="button">Suivre la livraison</a></p>',
-            'new_message': f'<p><a href="{settings.FRONTEND_URL}/messages" class="button">Voir les messages</a></p>',
-            'weather_alert': f'<p><a href="{settings.FRONTEND_URL}/weather" class="button">Voir les prévisions</a></p>',
+            "new_order": f'<p><a href="{settings.FRONTEND_URL}/orders/{notification.related_id}" class="button">Voir la commande</a></p>',
+            "order_accepted": f'<p><a href="{settings.FRONTEND_URL}/orders/{notification.related_id}" class="button">Suivre la commande</a></p>',
+            "order_shipped": f'<p><a href="{settings.FRONTEND_URL}/orders/{notification.related_id}" class="button">Suivre la livraison</a></p>',
+            "new_message": f'<p><a href="{settings.FRONTEND_URL}/messages" class="button">Voir les messages</a></p>',
+            "weather_alert": f'<p><a href="{settings.FRONTEND_URL}/weather" class="button">Voir les prévisions</a></p>',
         }
-        return actions.get(notification.notification_type, '')
-    
+        return actions.get(notification.notification_type, "")
+
     def _get_email_backend(self):
         """Get email backend based on settings"""
         return settings.EMAIL_BACKEND
-    
+
     def _get_push_service(self):
         """Get push notification service"""
         # Return configured push service
         return None
 
+
 # Helper functions
 notification_service = NotificationService()
+
 
 def send_welcome_email(user):
     """Send welcome email to new user"""
     notification_service.send_notification(
         user=user,
-        notification_type='welcome',
-        title='Bienvenue sur BetterAgri !',
+        notification_type="welcome",
+        title="Bienvenue sur BetterAgri !",
         message=f"""
         Bonjour {user.first_name},
         
@@ -221,92 +234,98 @@ def send_welcome_email(user):
         Cordialement,
         L'équipe BetterAgri
         """,
-        related_model='user',
-        related_id=str(user.id)
+        related_model="user",
+        related_id=str(user.id),
     )
+
 
 def send_order_notification(order, notification_type, user):
     """Send order-related notification"""
     messages = {
-        'new_order': {
-            'title': 'Nouvelle commande reçue !',
-            'message': f'Vous avez reçu une nouvelle commande #{order.order_number}.'
+        "new_order": {
+            "title": "Nouvelle commande reçue !",
+            "message": f"Vous avez reçu une nouvelle commande #{order.order_number}.",
         },
-        'order_accepted': {
-            'title': 'Commande acceptée',
-            'message': f'Votre commande #{order.order_number} a été acceptée par l\'agriculteur.'
+        "order_accepted": {
+            "title": "Commande acceptée",
+            "message": f"Votre commande #{order.order_number} a été acceptée par l'agriculteur.",
         },
-        'order_shipped': {
-            'title': 'Commande expédiée',
-            'message': f'Votre commande #{order.order_number} a été expédiée.'
+        "order_shipped": {
+            "title": "Commande expédiée",
+            "message": f"Votre commande #{order.order_number} a été expédiée.",
         },
-        'order_delivered': {
-            'title': 'Commande livrée',
-            'message': f'Votre commande #{order.order_number} a été livrée.'
+        "order_delivered": {
+            "title": "Commande livrée",
+            "message": f"Votre commande #{order.order_number} a été livrée.",
         },
-        'order_cancelled': {
-            'title': 'Commande annulée',
-            'message': f'La commande #{order.order_number} a été annulée.'
-        }
+        "order_cancelled": {
+            "title": "Commande annulée",
+            "message": f"La commande #{order.order_number} a été annulée.",
+        },
     }
-    
+
     if notification_type in messages:
         notification_service.send_notification(
             user=user,
             notification_type=notification_type,
-            title=messages[notification_type]['title'],
-            message=messages[notification_type]['message'],
-            related_model='order',
+            title=messages[notification_type]["title"],
+            message=messages[notification_type]["message"],
+            related_model="order",
             related_id=str(order.id),
-            data={'order_number': order.order_number}
+            data={"order_number": order.order_number},
         )
+
 
 def send_product_notification(product, notification_type, user):
     """Send product-related notification"""
-    if notification_type == 'new_product':
+    if notification_type == "new_product":
         notification_service.send_notification(
             user=user,  # Admin user
-            notification_type='new_product',
-            title='Nouveau produit ajouté',
+            notification_type="new_product",
+            title="Nouveau produit ajouté",
             message=f'Un nouveau produit "{product.name}" a été ajouté par {user.username}.',
-            related_model='product',
-            related_id=str(product.id)
+            related_model="product",
+            related_id=str(product.id),
         )
-    elif notification_type == 'low_stock':
+    elif notification_type == "low_stock":
         notification_service.send_notification(
             user=user,
-            notification_type='low_stock',
-            title='Stock faible',
+            notification_type="low_stock",
+            title="Stock faible",
             message=f'Le stock de "{product.name}" est faible ({product.available_quantity} {product.unit}).',
-            related_model='product',
-            related_id=str(product.id)
+            related_model="product",
+            related_id=str(product.id),
         )
+
 
 def send_message_notification(sender, receiver, message):
     """Send message notification"""
     notification_service.send_notification(
         user=receiver,
-        notification_type='new_message',
-        title='Nouveau message',
-        message=f'Vous avez reçu un nouveau message de {sender.username}.',
-        related_model='message',
+        notification_type="new_message",
+        title="Nouveau message",
+        message=f"Vous avez reçu un nouveau message de {sender.username}.",
+        related_model="message",
         related_id=str(message.id),
-        data={'sender_id': sender.id, 'sender_name': sender.username}
+        data={"sender_id": sender.id, "sender_name": sender.username},
     )
 
-def send_test_notification(user, notification_type='test', title='Test', message='Notification de test'):
+
+def send_test_notification(
+    user, notification_type="test", title="Test", message="Notification de test"
+):
     """Envoyer une notification de test"""
     from .models import Notification
-    
+
     notification = Notification.objects.create(
         user=user,
         notification_type=notification_type,
         title=title,
         message=message,
-        channels=['in_app'],
-        related_model='test',
+        channels=["in_app"],
+        related_model="test",
         related_id=str(user.id),
-        data={'test': True}
+        data={"test": True},
     )
-    
+
     return notification

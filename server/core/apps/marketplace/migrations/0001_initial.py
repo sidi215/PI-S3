@@ -17,82 +17,311 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='Category',
+            name="Category",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=100, verbose_name='Nom')),
-                ('description', models.TextField(blank=True, verbose_name='Description')),
-                ('image', models.ImageField(blank=True, null=True, upload_to='categories/', verbose_name='Image')),
-                ('parent', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='children', to='marketplace.category', verbose_name='Catégorie parente')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=100, verbose_name="Nom")),
+                (
+                    "description",
+                    models.TextField(blank=True, verbose_name="Description"),
+                ),
+                (
+                    "image",
+                    models.ImageField(
+                        blank=True,
+                        null=True,
+                        upload_to="categories/",
+                        verbose_name="Image",
+                    ),
+                ),
+                (
+                    "parent",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        related_name="children",
+                        to="marketplace.category",
+                        verbose_name="Catégorie parente",
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'Catégorie',
-                'verbose_name_plural': 'Catégories',
-                'ordering': ['name'],
+                "verbose_name": "Catégorie",
+                "verbose_name_plural": "Catégories",
+                "ordering": ["name"],
             },
         ),
         migrations.CreateModel(
-            name='Product',
+            name="Product",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=200, verbose_name='Nom')),
-                ('description', models.TextField(verbose_name='Description')),
-                ('price_per_unit', models.DecimalField(decimal_places=2, max_digits=10, validators=[django.core.validators.MinValueValidator(Decimal('0.01'))], verbose_name='Prix par unité')),
-                ('unit', models.CharField(default='kg', max_length=50, verbose_name='Unité')),
-                ('available_quantity', models.DecimalField(decimal_places=2, max_digits=10, validators=[django.core.validators.MinValueValidator(Decimal('0'))], verbose_name='Quantité disponible')),
-                ('harvest_date', models.DateField(verbose_name='Date de récolte')),
-                ('expiry_date', models.DateField(blank=True, null=True, verbose_name="Date d'expiration")),
-                ('organic', models.BooleanField(default=False, verbose_name='Biologique')),
-                ('quality_grade', models.CharField(choices=[('premium', 'Premium'), ('standard', 'Standard'), ('economy', 'Économique')], default='standard', max_length=20, verbose_name='Qualité')),
-                ('farm_location', models.CharField(max_length=200, verbose_name='Localisation de la ferme')),
-                ('delivery_radius', models.DecimalField(decimal_places=2, default=0, max_digits=6, verbose_name='Rayon de livraison (km)')),
-                ('status', models.CharField(choices=[('draft', 'Brouillon'), ('active', 'Actif'), ('inactive', 'Inactif'), ('sold_out', 'Épuisé')], default='draft', max_length=20, verbose_name='Statut')),
-                ('main_image', models.ImageField(upload_to='products/main/', verbose_name='Image principale')),
-                ('images', models.JSONField(blank=True, default=list, verbose_name='Images supplémentaires')),
-                ('views_count', models.PositiveIntegerField(default=0, verbose_name='Nombre de vues')),
-                ('orders_count', models.PositiveIntegerField(default=0, verbose_name='Nombre de commandes')),
-                ('created_at', models.DateTimeField(auto_now_add=True, verbose_name='Date de création')),
-                ('updated_at', models.DateTimeField(auto_now=True, verbose_name='Dernière modification')),
-                ('category', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='products', to='marketplace.category', verbose_name='Catégorie')),
-                ('farmer', models.ForeignKey(limit_choices_to={'user_type': 'farmer'}, on_delete=django.db.models.deletion.CASCADE, related_name='products', to=settings.AUTH_USER_MODEL, verbose_name='Agriculteur')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=200, verbose_name="Nom")),
+                ("description", models.TextField(verbose_name="Description")),
+                (
+                    "price_per_unit",
+                    models.DecimalField(
+                        decimal_places=2,
+                        max_digits=10,
+                        validators=[
+                            django.core.validators.MinValueValidator(Decimal("0.01"))
+                        ],
+                        verbose_name="Prix par unité",
+                    ),
+                ),
+                (
+                    "unit",
+                    models.CharField(default="kg", max_length=50, verbose_name="Unité"),
+                ),
+                (
+                    "available_quantity",
+                    models.DecimalField(
+                        decimal_places=2,
+                        max_digits=10,
+                        validators=[
+                            django.core.validators.MinValueValidator(Decimal("0"))
+                        ],
+                        verbose_name="Quantité disponible",
+                    ),
+                ),
+                ("harvest_date", models.DateField(verbose_name="Date de récolte")),
+                (
+                    "expiry_date",
+                    models.DateField(
+                        blank=True, null=True, verbose_name="Date d'expiration"
+                    ),
+                ),
+                (
+                    "organic",
+                    models.BooleanField(default=False, verbose_name="Biologique"),
+                ),
+                (
+                    "quality_grade",
+                    models.CharField(
+                        choices=[
+                            ("premium", "Premium"),
+                            ("standard", "Standard"),
+                            ("economy", "Économique"),
+                        ],
+                        default="standard",
+                        max_length=20,
+                        verbose_name="Qualité",
+                    ),
+                ),
+                (
+                    "farm_location",
+                    models.CharField(
+                        max_length=200, verbose_name="Localisation de la ferme"
+                    ),
+                ),
+                (
+                    "delivery_radius",
+                    models.DecimalField(
+                        decimal_places=2,
+                        default=0,
+                        max_digits=6,
+                        verbose_name="Rayon de livraison (km)",
+                    ),
+                ),
+                (
+                    "status",
+                    models.CharField(
+                        choices=[
+                            ("draft", "Brouillon"),
+                            ("active", "Actif"),
+                            ("inactive", "Inactif"),
+                            ("sold_out", "Épuisé"),
+                        ],
+                        default="draft",
+                        max_length=20,
+                        verbose_name="Statut",
+                    ),
+                ),
+                (
+                    "main_image",
+                    models.ImageField(
+                        upload_to="products/main/", verbose_name="Image principale"
+                    ),
+                ),
+                (
+                    "images",
+                    models.JSONField(
+                        blank=True, default=list, verbose_name="Images supplémentaires"
+                    ),
+                ),
+                (
+                    "views_count",
+                    models.PositiveIntegerField(
+                        default=0, verbose_name="Nombre de vues"
+                    ),
+                ),
+                (
+                    "orders_count",
+                    models.PositiveIntegerField(
+                        default=0, verbose_name="Nombre de commandes"
+                    ),
+                ),
+                (
+                    "created_at",
+                    models.DateTimeField(
+                        auto_now_add=True, verbose_name="Date de création"
+                    ),
+                ),
+                (
+                    "updated_at",
+                    models.DateTimeField(
+                        auto_now=True, verbose_name="Dernière modification"
+                    ),
+                ),
+                (
+                    "category",
+                    models.ForeignKey(
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        related_name="products",
+                        to="marketplace.category",
+                        verbose_name="Catégorie",
+                    ),
+                ),
+                (
+                    "farmer",
+                    models.ForeignKey(
+                        limit_choices_to={"user_type": "farmer"},
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="products",
+                        to=settings.AUTH_USER_MODEL,
+                        verbose_name="Agriculteur",
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'Produit',
-                'verbose_name_plural': 'Produits',
-                'ordering': ['-created_at'],
+                "verbose_name": "Produit",
+                "verbose_name_plural": "Produits",
+                "ordering": ["-created_at"],
             },
         ),
         migrations.CreateModel(
-            name='ProductReview',
+            name="ProductReview",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('rating', models.PositiveSmallIntegerField(validators=[django.core.validators.MinValueValidator(1), django.core.validators.MaxValueValidator(5)], verbose_name='Note')),
-                ('comment', models.TextField(verbose_name='Commentaire')),
-                ('images', models.JSONField(blank=True, default=list, verbose_name='Images')),
-                ('created_at', models.DateTimeField(auto_now_add=True, verbose_name='Date de création')),
-                ('updated_at', models.DateTimeField(auto_now=True, verbose_name='Dernière modification')),
-                ('product', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='reviews', to='marketplace.product', verbose_name='Produit')),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='product_reviews', to=settings.AUTH_USER_MODEL, verbose_name='Utilisateur')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "rating",
+                    models.PositiveSmallIntegerField(
+                        validators=[
+                            django.core.validators.MinValueValidator(1),
+                            django.core.validators.MaxValueValidator(5),
+                        ],
+                        verbose_name="Note",
+                    ),
+                ),
+                ("comment", models.TextField(verbose_name="Commentaire")),
+                (
+                    "images",
+                    models.JSONField(blank=True, default=list, verbose_name="Images"),
+                ),
+                (
+                    "created_at",
+                    models.DateTimeField(
+                        auto_now_add=True, verbose_name="Date de création"
+                    ),
+                ),
+                (
+                    "updated_at",
+                    models.DateTimeField(
+                        auto_now=True, verbose_name="Dernière modification"
+                    ),
+                ),
+                (
+                    "product",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="reviews",
+                        to="marketplace.product",
+                        verbose_name="Produit",
+                    ),
+                ),
+                (
+                    "user",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="product_reviews",
+                        to=settings.AUTH_USER_MODEL,
+                        verbose_name="Utilisateur",
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'Avis produit',
-                'verbose_name_plural': 'Avis produits',
-                'ordering': ['-created_at'],
-                'unique_together': {('product', 'user')},
+                "verbose_name": "Avis produit",
+                "verbose_name_plural": "Avis produits",
+                "ordering": ["-created_at"],
+                "unique_together": {("product", "user")},
             },
         ),
         migrations.CreateModel(
-            name='Wishlist',
+            name="Wishlist",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('created_at', models.DateTimeField(auto_now_add=True, verbose_name="Date d'ajout")),
-                ('product', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='wishlisted_by', to='marketplace.product', verbose_name='Produit')),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='wishlist_items', to=settings.AUTH_USER_MODEL, verbose_name='Utilisateur')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "created_at",
+                    models.DateTimeField(
+                        auto_now_add=True, verbose_name="Date d'ajout"
+                    ),
+                ),
+                (
+                    "product",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="wishlisted_by",
+                        to="marketplace.product",
+                        verbose_name="Produit",
+                    ),
+                ),
+                (
+                    "user",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="wishlist_items",
+                        to=settings.AUTH_USER_MODEL,
+                        verbose_name="Utilisateur",
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'Liste de souhaits',
-                'verbose_name_plural': 'Listes de souhaits',
-                'unique_together': {('user', 'product')},
+                "verbose_name": "Liste de souhaits",
+                "verbose_name_plural": "Listes de souhaits",
+                "unique_together": {("user", "product")},
             },
         ),
     ]

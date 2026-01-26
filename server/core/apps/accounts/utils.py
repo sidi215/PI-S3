@@ -5,16 +5,17 @@ from django.utils.encoding import force_bytes
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.urls import reverse
 
+
 def send_verification_email(user):
     token_generator = PasswordResetTokenGenerator()
     token = token_generator.make_token(user)
     uid = urlsafe_base64_encode(force_bytes(user.pk))
     verification_token = f"{uid}.{token}"
-    
+
     verification_url = f"{settings.FRONTEND_URL}/verify-email/{verification_token}"
-    
-    subject = 'Vérifiez votre email - BetterAgri'
-    message = f'''
+
+    subject = "Vérifiez votre email - BetterAgri"
+    message = f"""
     Bonjour {user.first_name},
     
     Merci de vous être inscrit sur BetterAgri. 
@@ -26,8 +27,8 @@ def send_verification_email(user):
     
     Cordialement,
     L'équipe BetterAgri
-    '''
-    
+    """
+
     send_mail(
         subject,
         message,
@@ -36,16 +37,17 @@ def send_verification_email(user):
         fail_silently=False,
     )
 
+
 def send_password_reset_email(user):
     token_generator = PasswordResetTokenGenerator()
     token = token_generator.make_token(user)
     uid = urlsafe_base64_encode(force_bytes(user.pk))
     reset_token = f"{uid}.{token}"
-    
+
     reset_url = f"{settings.FRONTEND_URL}/reset-password/{reset_token}"
-    
-    subject = 'Réinitialisation de mot de passe - BetterAgri'
-    message = f'''
+
+    subject = "Réinitialisation de mot de passe - BetterAgri"
+    message = f"""
     Bonjour {user.first_name},
     
     Vous avez demandé la réinitialisation de votre mot de passe.
@@ -59,8 +61,8 @@ def send_password_reset_email(user):
     
     Cordialement,
     L'équipe BetterAgri
-    '''
-    
+    """
+
     send_mail(
         subject,
         message,

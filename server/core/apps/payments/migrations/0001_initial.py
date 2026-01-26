@@ -12,94 +12,258 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('orders', '0001_initial'),
+        ("orders", "0001_initial"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Payment',
+            name="Payment",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('payment_id', models.CharField(max_length=100, unique=True)),
-                ('amount', models.DecimalField(decimal_places=2, max_digits=12, validators=[django.core.validators.MinValueValidator(Decimal('0.01'))])),
-                ('currency', models.CharField(default='XOF', max_length=3)),
-                ('payment_method', models.CharField(choices=[('mobile_money', 'Mobile Money'), ('credit_card', 'Carte de crédit'), ('bank_transfer', 'Virement bancaire'), ('cash_on_delivery', 'Paiement à la livraison')], max_length=20)),
-                ('status', models.CharField(choices=[('pending', 'En attente'), ('processing', 'En traitement'), ('completed', 'Terminé'), ('failed', 'Échoué'), ('refunded', 'Remboursé'), ('cancelled', 'Annulé')], default='pending', max_length=20)),
-                ('provider', models.CharField(blank=True, max_length=50)),
-                ('provider_transaction_id', models.CharField(blank=True, max_length=100)),
-                ('card_last4', models.CharField(blank=True, max_length=4)),
-                ('card_brand', models.CharField(blank=True, max_length=20)),
-                ('mobile_number', models.CharField(blank=True, max_length=15)),
-                ('mobile_provider', models.CharField(blank=True, max_length=20)),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('processed_at', models.DateTimeField(blank=True, null=True)),
-                ('completed_at', models.DateTimeField(blank=True, null=True)),
-                ('failed_at', models.DateTimeField(blank=True, null=True)),
-                ('metadata', models.JSONField(blank=True, default=dict)),
-                ('order', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, related_name='payment', to='orders.order')),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='payments', to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("payment_id", models.CharField(max_length=100, unique=True)),
+                (
+                    "amount",
+                    models.DecimalField(
+                        decimal_places=2,
+                        max_digits=12,
+                        validators=[
+                            django.core.validators.MinValueValidator(Decimal("0.01"))
+                        ],
+                    ),
+                ),
+                ("currency", models.CharField(default="XOF", max_length=3)),
+                (
+                    "payment_method",
+                    models.CharField(
+                        choices=[
+                            ("mobile_money", "Mobile Money"),
+                            ("credit_card", "Carte de crédit"),
+                            ("bank_transfer", "Virement bancaire"),
+                            ("cash_on_delivery", "Paiement à la livraison"),
+                        ],
+                        max_length=20,
+                    ),
+                ),
+                (
+                    "status",
+                    models.CharField(
+                        choices=[
+                            ("pending", "En attente"),
+                            ("processing", "En traitement"),
+                            ("completed", "Terminé"),
+                            ("failed", "Échoué"),
+                            ("refunded", "Remboursé"),
+                            ("cancelled", "Annulé"),
+                        ],
+                        default="pending",
+                        max_length=20,
+                    ),
+                ),
+                ("provider", models.CharField(blank=True, max_length=50)),
+                (
+                    "provider_transaction_id",
+                    models.CharField(blank=True, max_length=100),
+                ),
+                ("card_last4", models.CharField(blank=True, max_length=4)),
+                ("card_brand", models.CharField(blank=True, max_length=20)),
+                ("mobile_number", models.CharField(blank=True, max_length=15)),
+                ("mobile_provider", models.CharField(blank=True, max_length=20)),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("processed_at", models.DateTimeField(blank=True, null=True)),
+                ("completed_at", models.DateTimeField(blank=True, null=True)),
+                ("failed_at", models.DateTimeField(blank=True, null=True)),
+                ("metadata", models.JSONField(blank=True, default=dict)),
+                (
+                    "order",
+                    models.OneToOneField(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="payment",
+                        to="orders.order",
+                    ),
+                ),
+                (
+                    "user",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="payments",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'Paiement',
-                'verbose_name_plural': 'Paiements',
-                'ordering': ['-created_at'],
+                "verbose_name": "Paiement",
+                "verbose_name_plural": "Paiements",
+                "ordering": ["-created_at"],
             },
         ),
         migrations.CreateModel(
-            name='Payout',
+            name="Payout",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('payout_id', models.CharField(max_length=100, unique=True)),
-                ('amount', models.DecimalField(decimal_places=2, max_digits=12, validators=[django.core.validators.MinValueValidator(Decimal('0.01'))])),
-                ('currency', models.CharField(default='XOF', max_length=3)),
-                ('payout_method', models.CharField(choices=[('bank_transfer', 'Virement bancaire'), ('mobile_money', 'Mobile Money')], max_length=20)),
-                ('status', models.CharField(choices=[('pending', 'En attente'), ('processing', 'En traitement'), ('completed', 'Terminé'), ('failed', 'Échoué'), ('cancelled', 'Annulé')], default='pending', max_length=20)),
-                ('bank_name', models.CharField(blank=True, max_length=100)),
-                ('bank_account_number', models.CharField(blank=True, max_length=50)),
-                ('bank_account_name', models.CharField(blank=True, max_length=100)),
-                ('mobile_number', models.CharField(blank=True, max_length=15)),
-                ('mobile_provider', models.CharField(blank=True, max_length=20)),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('processed_at', models.DateTimeField(blank=True, null=True)),
-                ('completed_at', models.DateTimeField(blank=True, null=True)),
-                ('farmer', models.ForeignKey(limit_choices_to={'user_type': 'farmer'}, on_delete=django.db.models.deletion.CASCADE, related_name='payouts', to=settings.AUTH_USER_MODEL)),
-                ('payments', models.ManyToManyField(related_name='payouts', to='payments.payment')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("payout_id", models.CharField(max_length=100, unique=True)),
+                (
+                    "amount",
+                    models.DecimalField(
+                        decimal_places=2,
+                        max_digits=12,
+                        validators=[
+                            django.core.validators.MinValueValidator(Decimal("0.01"))
+                        ],
+                    ),
+                ),
+                ("currency", models.CharField(default="XOF", max_length=3)),
+                (
+                    "payout_method",
+                    models.CharField(
+                        choices=[
+                            ("bank_transfer", "Virement bancaire"),
+                            ("mobile_money", "Mobile Money"),
+                        ],
+                        max_length=20,
+                    ),
+                ),
+                (
+                    "status",
+                    models.CharField(
+                        choices=[
+                            ("pending", "En attente"),
+                            ("processing", "En traitement"),
+                            ("completed", "Terminé"),
+                            ("failed", "Échoué"),
+                            ("cancelled", "Annulé"),
+                        ],
+                        default="pending",
+                        max_length=20,
+                    ),
+                ),
+                ("bank_name", models.CharField(blank=True, max_length=100)),
+                ("bank_account_number", models.CharField(blank=True, max_length=50)),
+                ("bank_account_name", models.CharField(blank=True, max_length=100)),
+                ("mobile_number", models.CharField(blank=True, max_length=15)),
+                ("mobile_provider", models.CharField(blank=True, max_length=20)),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("processed_at", models.DateTimeField(blank=True, null=True)),
+                ("completed_at", models.DateTimeField(blank=True, null=True)),
+                (
+                    "farmer",
+                    models.ForeignKey(
+                        limit_choices_to={"user_type": "farmer"},
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="payouts",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
+                (
+                    "payments",
+                    models.ManyToManyField(
+                        related_name="payouts", to="payments.payment"
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'Paiement vendeur',
-                'verbose_name_plural': 'Paiements vendeurs',
-                'ordering': ['-created_at'],
+                "verbose_name": "Paiement vendeur",
+                "verbose_name_plural": "Paiements vendeurs",
+                "ordering": ["-created_at"],
             },
         ),
         migrations.CreateModel(
-            name='Transaction',
+            name="Transaction",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('transaction_id', models.CharField(max_length=100, unique=True)),
-                ('amount', models.DecimalField(decimal_places=2, max_digits=12, validators=[django.core.validators.MinValueValidator(Decimal('0.01'))])),
-                ('transaction_type', models.CharField(choices=[('payment', 'Paiement'), ('refund', 'Remboursement'), ('withdrawal', 'Retrait')], max_length=20)),
-                ('status', models.CharField(choices=[('pending', 'En attente'), ('processing', 'En traitement'), ('completed', 'Terminé'), ('failed', 'Échoué'), ('refunded', 'Remboursé'), ('cancelled', 'Annulé')], max_length=20)),
-                ('provider_response', models.JSONField(blank=True, default=dict)),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('payment', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='transactions', to='payments.payment')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("transaction_id", models.CharField(max_length=100, unique=True)),
+                (
+                    "amount",
+                    models.DecimalField(
+                        decimal_places=2,
+                        max_digits=12,
+                        validators=[
+                            django.core.validators.MinValueValidator(Decimal("0.01"))
+                        ],
+                    ),
+                ),
+                (
+                    "transaction_type",
+                    models.CharField(
+                        choices=[
+                            ("payment", "Paiement"),
+                            ("refund", "Remboursement"),
+                            ("withdrawal", "Retrait"),
+                        ],
+                        max_length=20,
+                    ),
+                ),
+                (
+                    "status",
+                    models.CharField(
+                        choices=[
+                            ("pending", "En attente"),
+                            ("processing", "En traitement"),
+                            ("completed", "Terminé"),
+                            ("failed", "Échoué"),
+                            ("refunded", "Remboursé"),
+                            ("cancelled", "Annulé"),
+                        ],
+                        max_length=20,
+                    ),
+                ),
+                ("provider_response", models.JSONField(blank=True, default=dict)),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                (
+                    "payment",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="transactions",
+                        to="payments.payment",
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'Transaction',
-                'verbose_name_plural': 'Transactions',
-                'ordering': ['-created_at'],
+                "verbose_name": "Transaction",
+                "verbose_name_plural": "Transactions",
+                "ordering": ["-created_at"],
             },
         ),
         migrations.AddIndex(
-            model_name='payment',
-            index=models.Index(fields=['payment_id'], name='payments_pa_payment_6c9e39_idx'),
+            model_name="payment",
+            index=models.Index(
+                fields=["payment_id"], name="payments_pa_payment_6c9e39_idx"
+            ),
         ),
         migrations.AddIndex(
-            model_name='payment',
-            index=models.Index(fields=['user', 'status'], name='payments_pa_user_id_01767a_idx'),
+            model_name="payment",
+            index=models.Index(
+                fields=["user", "status"], name="payments_pa_user_id_01767a_idx"
+            ),
         ),
         migrations.AddIndex(
-            model_name='payment',
-            index=models.Index(fields=['order', 'status'], name='payments_pa_order_i_a76289_idx'),
+            model_name="payment",
+            index=models.Index(
+                fields=["order", "status"], name="payments_pa_order_i_a76289_idx"
+            ),
         ),
     ]

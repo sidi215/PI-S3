@@ -1,6 +1,5 @@
 def get_recommendation(disease: str) -> dict:
     recommendations = {
-
         # ================= TOMATO =================
         "Tomato Healthy": {
             "recommendation": (
@@ -9,12 +8,11 @@ def get_recommendation(disease: str) -> dict:
             "actions": [
                 "Continuer la surveillance régulière",
                 "Maintenir une bonne irrigation",
-                "Éviter l’excès d’humidité"
+                "Éviter l’excès d’humidité",
             ],
             "treatment_duration": "—",
-            "products": "Aucun"
+            "products": "Aucun",
         },
-
         "Tomato Early Blight": {
             "recommendation": (
                 "Early blight detected. Remove infected leaves immediately. "
@@ -23,12 +21,11 @@ def get_recommendation(disease: str) -> dict:
             "actions": [
                 "Supprimer les feuilles infectées",
                 "Appliquer un fongicide adapté",
-                "Éviter l’arrosage par aspersion"
+                "Éviter l’arrosage par aspersion",
             ],
             "treatment_duration": "7–14 jours",
-            "products": "Fongicide"
+            "products": "Fongicide",
         },
-
         "Tomato Late Blight": {
             "recommendation": (
                 "Late blight detected. This disease spreads rapidly. "
@@ -37,12 +34,11 @@ def get_recommendation(disease: str) -> dict:
             "actions": [
                 "Isoler immédiatement les plantes atteintes",
                 "Détruire les plants gravement infectés",
-                "Appliquer un fongicide systémique"
+                "Appliquer un fongicide systémique",
             ],
             "treatment_duration": "Urgent (immédiat)",
-            "products": "Fongicide systémique"
+            "products": "Fongicide systémique",
         },
-
         "Tomato Septoria Leaf Spot": {
             "recommendation": (
                 "Septoria leaf spot detected. Remove affected leaves "
@@ -51,12 +47,11 @@ def get_recommendation(disease: str) -> dict:
             "actions": [
                 "Retirer les feuilles atteintes",
                 "Améliorer l’aération entre les plants",
-                "Appliquer un fongicide si nécessaire"
+                "Appliquer un fongicide si nécessaire",
             ],
             "treatment_duration": "7–10 jours",
-            "products": "Fongicide"
+            "products": "Fongicide",
         },
-
         "Tomato Bacterial Spot": {
             "recommendation": (
                 "Bacterial spot detected. Avoid working with wet plants "
@@ -65,12 +60,11 @@ def get_recommendation(disease: str) -> dict:
             "actions": [
                 "Éviter de manipuler les plantes humides",
                 "Appliquer un bactéricide au cuivre",
-                "Désinfecter les outils"
+                "Désinfecter les outils",
             ],
             "treatment_duration": "7 jours",
-            "products": "Bactéricide (cuivre)"
+            "products": "Bactéricide (cuivre)",
         },
-
         "Tomato Leaf Mold": {
             "recommendation": (
                 "Leaf mold detected. Reduce humidity and improve ventilation."
@@ -78,12 +72,11 @@ def get_recommendation(disease: str) -> dict:
             "actions": [
                 "Réduire l’humidité",
                 "Améliorer la ventilation",
-                "Appliquer un fongicide si nécessaire"
+                "Appliquer un fongicide si nécessaire",
             ],
             "treatment_duration": "7–14 jours",
-            "products": "Fongicide"
+            "products": "Fongicide",
         },
-
         "Tomato Target Spot": {
             "recommendation": (
                 "Target spot detected. Remove infected leaves and apply fungicide."
@@ -91,12 +84,11 @@ def get_recommendation(disease: str) -> dict:
             "actions": [
                 "Supprimer les feuilles infectées",
                 "Appliquer un fongicide",
-                "Surveiller la propagation"
+                "Surveiller la propagation",
             ],
             "treatment_duration": "7–14 jours",
-            "products": "Fongicide"
+            "products": "Fongicide",
         },
-
         "Tomato Spider Mites": {
             "recommendation": (
                 "Possible spider mite infestation. Inspect underside of leaves "
@@ -105,12 +97,11 @@ def get_recommendation(disease: str) -> dict:
             "actions": [
                 "Inspecter le dessous des feuilles",
                 "Appliquer un acaricide ou huile de neem",
-                "Augmenter légèrement l’humidité"
+                "Augmenter légèrement l’humidité",
             ],
             "treatment_duration": "5–10 jours",
-            "products": "Acaricide / Neem"
+            "products": "Acaricide / Neem",
         },
-
         "Tomato Yellow Leaf Curl Virus": {
             "recommendation": (
                 "Yellow leaf curl virus detected. No chemical cure available."
@@ -118,12 +109,11 @@ def get_recommendation(disease: str) -> dict:
             "actions": [
                 "Arracher les plants infectés",
                 "Contrôler les aleurodes",
-                "Éviter la replantation immédiate"
+                "Éviter la replantation immédiate",
             ],
             "treatment_duration": "—",
-            "products": "Aucun"
+            "products": "Aucun",
         },
-
         "Tomato Mosaic Virus": {
             "recommendation": (
                 "Mosaic virus detected. Remove infected plants immediately."
@@ -131,34 +121,31 @@ def get_recommendation(disease: str) -> dict:
             "actions": [
                 "Supprimer les plants infectés",
                 "Désinfecter les outils",
-                "Éviter le contact entre plants"
+                "Éviter le contact entre plants",
             ],
             "treatment_duration": "—",
-            "products": "Aucun"
+            "products": "Aucun",
         },
-
         # ================= POTATO =================
         "Potato Healthy": {
             "recommendation": "Plant appears healthy. Continue regular monitoring.",
             "actions": [
                 "Surveiller régulièrement",
-                "Maintenir une bonne fertilisation"
+                "Maintenir une bonne fertilisation",
             ],
             "treatment_duration": "—",
-            "products": "Aucun"
+            "products": "Aucun",
         },
-
         "Potato Early Blight": {
             "recommendation": "Early blight detected. Remove infected leaves and apply fungicide.",
             "actions": [
                 "Retirer les feuilles infectées",
                 "Appliquer un fongicide",
-                "Éviter l’humidité excessive"
+                "Éviter l’humidité excessive",
             ],
             "treatment_duration": "7–14 jours",
-            "products": "Fongicide"
+            "products": "Fongicide",
         },
-
         "Potato Late Blight": {
             "recommendation": (
                 "Late blight detected. High risk disease. "
@@ -167,23 +154,18 @@ def get_recommendation(disease: str) -> dict:
             "actions": [
                 "Isoler les plants infectés",
                 "Appliquer un fongicide immédiatement",
-                "Surveiller les parcelles voisines"
+                "Surveiller les parcelles voisines",
             ],
             "treatment_duration": "Urgent",
-            "products": "Fongicide"
+            "products": "Fongicide",
         },
-
         # ================= PEPPER =================
         "Pepper Healthy": {
             "recommendation": "Plant appears healthy. Maintain good field hygiene.",
-            "actions": [
-                "Maintenir l’hygiène du champ",
-                "Surveiller les feuilles"
-            ],
+            "actions": ["Maintenir l’hygiène du champ", "Surveiller les feuilles"],
             "treatment_duration": "—",
-            "products": "Aucun"
+            "products": "Aucun",
         },
-
         "Pepper Bacterial Spot": {
             "recommendation": (
                 "Bacterial spot detected. Avoid overhead irrigation "
@@ -192,10 +174,10 @@ def get_recommendation(disease: str) -> dict:
             "actions": [
                 "Éviter l’arrosage par aspersion",
                 "Appliquer un bactéricide au cuivre",
-                "Supprimer les feuilles infectées"
+                "Supprimer les feuilles infectées",
             ],
             "treatment_duration": "7 jours",
-            "products": "Bactéricide (cuivre)"
+            "products": "Bactéricide (cuivre)",
         },
     }
 
@@ -205,6 +187,6 @@ def get_recommendation(disease: str) -> dict:
             "recommendation": "Result uncertain. Please take another clear photo of a single leaf.",
             "actions": ["Reprendre une photo claire d’une seule feuille"],
             "treatment_duration": "—",
-            "products": "—"
-        }
+            "products": "—",
+        },
     )

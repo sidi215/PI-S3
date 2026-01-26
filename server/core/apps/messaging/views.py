@@ -18,7 +18,6 @@ from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
 
 
-
 # =====================================================
 # CONVERSATIONS
 # =====================================================
@@ -52,7 +51,9 @@ class ConversationViewSet(viewsets.ModelViewSet):
 
         if not participant_ids or len(participant_ids) != 1:
             return Response(
-                {"error": "Une conversation doit avoir exactement un autre participant."},
+                {
+                    "error": "Une conversation doit avoir exactement un autre participant."
+                },
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
@@ -60,8 +61,7 @@ class ConversationViewSet(viewsets.ModelViewSet):
 
         # Chercher une conversation existante
         existing_conversation = (
-            Conversation.objects
-            .filter(participants=request.user)
+            Conversation.objects.filter(participants=request.user)
             .filter(participants__id=other_user_id)
             .distinct()
             .first()
@@ -73,8 +73,7 @@ class ConversationViewSet(viewsets.ModelViewSet):
 
         # Sinon → créer une nouvelle conversation
         serializer = ConversationCreateSerializer(
-            data=request.data,
-            context={"request": request}
+            data=request.data, context={"request": request}
         )
         serializer.is_valid(raise_exception=True)
         conversation = serializer.save()
@@ -122,15 +121,11 @@ class MessageViewSet(viewsets.ModelViewSet):
         ).order_by("-created_at")
 
     def create(self, request, *args, **kwargs):
-        serializer = MessageSerializer(
-            data=request.data,
-            context={"request": request}
-        )
+        serializer = MessageSerializer(data=request.data, context={"request": request})
         serializer.is_valid(raise_exception=True)
         message = serializer.save(sender=request.user)
 
         conversation = message.conversation
-
 
         channel_layer = get_channel_layer()
 
@@ -156,9 +151,8 @@ class MessageViewSet(viewsets.ModelViewSet):
                 {
                     "type": "chat_message",
                     "message": message_payload,
-                }
+                },
             )
-
 
         for participant in conversation.participants.all():
             if participant != request.user:
@@ -173,7 +167,6 @@ class MessageViewSet(viewsets.ModelViewSet):
             status=status.HTTP_201_CREATED,
         )
 
-
     @action(detail=True, methods=["post"])
     def mark_read(self, request, pk=None):
         message = self.get_object()
@@ -182,10 +175,14 @@ class MessageViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=["get"])
     def unread_count(self, request):
-        count = Message.objects.filter(
-            conversation__participants=request.user,
-            is_read=False,
-        ).exclude(sender=request.user).count()
+        count = (
+            Message.objects.filter(
+                conversation__participants=request.user,
+                is_read=False,
+            )
+            .exclude(sender=request.user)
+            .count()
+        )
 
         return Response({"unread_count": count})
 
@@ -198,9 +195,9 @@ class NotificationViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        return Notification.objects.filter(
-            user=self.request.user
-        ).order_by("-created_at")
+        return Notification.objects.filter(user=self.request.user).order_by(
+            "-created_at"
+        )
 
     @action(detail=True, methods=["post"])
     def mark_read(self, request, pk=None):
@@ -210,18 +207,12 @@ class NotificationViewSet(viewsets.ReadOnlyModelViewSet):
 
     @action(detail=False, methods=["post"])
     def mark_all_read(self, request):
-        qs = Notification.objects.filter(
-            user=request.user,
-            is_read=False
-        )
+        qs = Notification.objects.filter(user=request.user, is_read=False)
         count = qs.count()
         qs.update(is_read=True)
         return Response({"message": f"{count} notifications marquées comme lues"})
 
     @action(detail=False, methods=["get"])
     def unread_count(self, request):
-        count = Notification.objects.filter(
-            user=request.user,
-            is_read=False
-        ).count()
+        count = Notification.objects.filter(user=request.user, is_read=False).count()
         return Response({"unread_count": count})

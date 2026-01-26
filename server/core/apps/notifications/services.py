@@ -10,181 +10,177 @@ from django.conf import settings
 from django.utils import timezone
 import requests
 
+
 class WebPushService:
     """Service de notifications push utilisant Web Push API native"""
-    
+
     def __init__(self):
         # Générer ou charger les clés VAPID
-        self.vapid_private_key, self.vapid_public_key = self._load_or_generate_vapid_keys()
+        self.vapid_private_key, self.vapid_public_key = (
+            self._load_or_generate_vapid_keys()
+        )
         self.vapid_claims = {
             "sub": "mailto:contact@betteragri.mr",
-            "exp": int(timezone.now().timestamp()) + 86400  # 24h
+            "exp": int(timezone.now().timestamp()) + 86400,  # 24h
         }
-    
+
     def _load_or_generate_vapid_keys(self):
         """Charger ou générer les clés VAPID"""
-        keys_path = os.path.join(settings.BASE_DIR, 'vapid_keys.json')
-        
+        keys_path = os.path.join(settings.BASE_DIR, "vapid_keys.json")
+
         try:
             if os.path.exists(keys_path):
-                with open(keys_path, 'r') as f:
+                with open(keys_path, "r") as f:
                     keys = json.load(f)
                     private_key = serialization.load_pem_private_key(
-                        keys['private_key'].encode(),
+                        keys["private_key"].encode(),
                         password=None,
-                        backend=default_backend()
+                        backend=default_backend(),
                     )
                     public_key = serialization.load_pem_public_key(
-                        keys['public_key'].encode(),
-                        backend=default_backend()
+                        keys["public_key"].encode(), backend=default_backend()
                     )
                     return private_key, public_key
         except:
             pass
-        
+
         # Générer de nouvelles clés
         private_key = ec.generate_private_key(ec.SECP256R1(), default_backend())
         public_key = private_key.public_key()
-        
+
         # Sauvegarder
         keys = {
-            'private_key': private_key.private_bytes(
+            "private_key": private_key.private_bytes(
                 encoding=serialization.Encoding.PEM,
                 format=serialization.PrivateFormat.PKCS8,
-                encryption_algorithm=serialization.NoEncryption()
+                encryption_algorithm=serialization.NoEncryption(),
             ).decode(),
-            'public_key': public_key.public_bytes(
+            "public_key": public_key.public_bytes(
                 encoding=serialization.Encoding.PEM,
-                format=serialization.PublicFormat.SubjectPublicKeyInfo
-            ).decode()
+                format=serialization.PublicFormat.SubjectPublicKeyInfo,
+            ).decode(),
         }
-        
-        with open(keys_path, 'w') as f:
+
+        with open(keys_path, "w") as f:
             json.dump(keys, f)
-        
+
         return private_key, public_key
-    
+
     def get_vapid_public_key(self):
         """Obtenir la clé publique VAPID au format base64 URL safe"""
         public_key_bytes = self.vapid_public_key.public_bytes(
             encoding=serialization.Encoding.X962,
-            format=serialization.PublicFormat.UncompressedPoint
+            format=serialization.PublicFormat.UncompressedPoint,
         )
-        
+
         # Web Push utilise le format base64 URL safe sans padding
-        return base64.urlsafe_b64encode(public_key_bytes).decode().strip('=')
-    
+        return base64.urlsafe_b64encode(public_key_bytes).decode().strip("=")
+
     def send_push_notification(self, subscription_info, title, body, data=None):
         """Envoyer une notification push"""
         try:
             # Endpoint du service push (du navigateur)
-            endpoint = subscription_info.get('endpoint')
-            
+            endpoint = subscription_info.get("endpoint")
+
             if not endpoint:
                 return False
-            
+
             # Clés de chiffrement du client
             p256dh = base64.urlsafe_b64decode(
-                subscription_info.get('keys', {}).get('p256dh') + '==='
+                subscription_info.get("keys", {}).get("p256dh") + "==="
             )
             auth = base64.urlsafe_b64decode(
-                subscription_info.get('keys', {}).get('auth') + '==='
+                subscription_info.get("keys", {}).get("auth") + "==="
             )
-            
+
             # Créer le payload
             payload = {
-                'title': title,
-                'body': body,
-                'icon': '/icon-192x192.png',
-                'badge': '/badge-72x72.png',
-                'timestamp': int(timezone.now().timestamp() * 1000)
+                "title": title,
+                "body": body,
+                "icon": "/icon-192x192.png",
+                "badge": "/badge-72x72.png",
+                "timestamp": int(timezone.now().timestamp() * 1000),
             }
-            
+
             if data:
-                payload['data'] = data
-            
+                payload["data"] = data
+
             payload_json = json.dumps(payload)
-            payload_bytes = payload_json.encode('utf-8')
-            
+            payload_bytes = payload_json.encode("utf-8")
+
             # Chiffrer le payload (simplifié - en production utiliser webpush library)
             # Pour le moment, on envoie sans chiffrement pour le POC
             encrypted_payload = payload_bytes
-            
+
             # Préparer les headers
             headers = {
-                'Content-Type': 'application/octet-stream',
-                'Content-Encoding': 'aes128gcm',
-                'TTL': '86400',  # 24h
-                'Urgency': 'normal'
+                "Content-Type": "application/octet-stream",
+                "Content-Encoding": "aes128gcm",
+                "TTL": "86400",  # 24h
+                "Urgency": "normal",
             }
-            
+
             # Ajouter l'en-tête d'autorisation VAPID
             vapid_header = self._generate_vapid_header(endpoint)
-            headers['Authorization'] = vapid_header
-            
+            headers["Authorization"] = vapid_header
+
             # Envoyer la requête
             response = requests.post(
-                endpoint,
-                data=encrypted_payload,
-                headers=headers,
-                timeout=10
+                endpoint, data=encrypted_payload, headers=headers, timeout=10
             )
-            
+
             return response.status_code == 201
-            
+
         except Exception as e:
             print(f"Erreur envoi push: {e}")
             return False
-    
+
     def _generate_vapid_header(self, endpoint):
         """Générer l'en-tête d'autorisation VAPID"""
         # Simplifié pour le POC
         # En production, utiliser la librairie webpush ou py-vapid
         return f"vapid t={self.get_vapid_public_key()}, k={self.get_vapid_public_key()}"
-    
+
     def subscribe_user(self, user, subscription_info):
         """Enregistrer un abonnement push pour un utilisateur"""
         from .models import PushSubscription
-        
+
         try:
             # Vérifier si déjà abonné
             existing = PushSubscription.objects.filter(
-                user=user,
-                endpoint=subscription_info['endpoint']
+                user=user, endpoint=subscription_info["endpoint"]
             ).first()
-            
+
             if existing:
                 existing.subscription_info = subscription_info
                 existing.save()
             else:
                 PushSubscription.objects.create(
                     user=user,
-                    endpoint=subscription_info['endpoint'],
-                    subscription_info=subscription_info
+                    endpoint=subscription_info["endpoint"],
+                    subscription_info=subscription_info,
                 )
-            
+
             return True
         except Exception as e:
             print(f"Erreur subscription: {e}")
             return False
-    
+
     def unsubscribe_user(self, user, endpoint):
         """Désabonner un utilisateur"""
         from .models import PushSubscription
-        
+
         try:
-            PushSubscription.objects.filter(
-                user=user,
-                endpoint=endpoint
-            ).delete()
+            PushSubscription.objects.filter(user=user, endpoint=endpoint).delete()
             return True
         except Exception as e:
             print(f"Erreur unsubscription: {e}")
             return False
 
+
 class ServiceWorkerService:
     """Service pour gérer le Service Worker et le cache"""
-    
+
     @staticmethod
     def generate_service_worker_js():
         """Générer le code du Service Worker"""
@@ -397,7 +393,7 @@ async function syncMessages() {
   }
 }
 """
-    
+
     @staticmethod
     def generate_manifest_json():
         """Générer le manifeste PWA"""
@@ -410,45 +406,13 @@ async function syncMessages() {
             "background_color": "#4CAF50",
             "theme_color": "#4CAF50",
             "icons": [
-                {
-                    "src": "/icon-72x72.png",
-                    "sizes": "72x72",
-                    "type": "image/png"
-                },
-                {
-                    "src": "/icon-96x96.png",
-                    "sizes": "96x96",
-                    "type": "image/png"
-                },
-                {
-                    "src": "/icon-128x128.png",
-                    "sizes": "128x128",
-                    "type": "image/png"
-                },
-                {
-                    "src": "/icon-144x144.png",
-                    "sizes": "144x144",
-                    "type": "image/png"
-                },
-                {
-                    "src": "/icon-152x152.png",
-                    "sizes": "152x152",
-                    "type": "image/png"
-                },
-                {
-                    "src": "/icon-192x192.png",
-                    "sizes": "192x192",
-                    "type": "image/png"
-                },
-                {
-                    "src": "/icon-384x384.png",
-                    "sizes": "384x384",
-                    "type": "image/png"
-                },
-                {
-                    "src": "/icon-512x512.png",
-                    "sizes": "512x512",
-                    "type": "image/png"
-                }
-            ]
+                {"src": "/icon-72x72.png", "sizes": "72x72", "type": "image/png"},
+                {"src": "/icon-96x96.png", "sizes": "96x96", "type": "image/png"},
+                {"src": "/icon-128x128.png", "sizes": "128x128", "type": "image/png"},
+                {"src": "/icon-144x144.png", "sizes": "144x144", "type": "image/png"},
+                {"src": "/icon-152x152.png", "sizes": "152x152", "type": "image/png"},
+                {"src": "/icon-192x192.png", "sizes": "192x192", "type": "image/png"},
+                {"src": "/icon-384x384.png", "sizes": "384x384", "type": "image/png"},
+                {"src": "/icon-512x512.png", "sizes": "512x512", "type": "image/png"},
+            ],
         }

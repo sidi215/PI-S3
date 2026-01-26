@@ -4,6 +4,7 @@ from app.services.recommendations import get_recommendation
 
 router = APIRouter()
 
+
 @router.post("/predict")
 async def predict(
     file: UploadFile = File(...),

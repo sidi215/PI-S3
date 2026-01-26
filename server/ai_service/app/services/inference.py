@@ -11,6 +11,7 @@ model = tf.keras.models.load_model(MODEL_PATH)
 with open(LABELS_PATH, "r") as f:
     LABELS = json.load(f)
 
+
 async def run_inference(file):
     image = await file.read()
     img_array = preprocess_image(image)

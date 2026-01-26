@@ -3,6 +3,7 @@ import numpy as np
 
 IMG_SIZE = 224
 
+
 def preprocess_image(image_bytes: bytes):
     nparr = np.frombuffer(image_bytes, np.uint8)
     img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
