@@ -1,17 +1,17 @@
-import { create } from 'zustand'
-import { persist } from 'zustand/middleware'
-import { authService, UserProfile } from '@/services/auth'
+import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
+import { authService, UserProfile } from '@/services/auth';
 
 interface AuthState {
-  user: UserProfile | null
-  isLoading: boolean
-  error: string | null
-  
-  login: (username: string, password: string) => Promise<void>
-  register: (data: any) => Promise<void>
-  logout: () => void
-  loadUser: () => Promise<void>
-  updateProfile: (data: Partial<UserProfile>) => Promise<void>
+  user: UserProfile | null;
+  isLoading: boolean;
+  error: string | null;
+
+  login: (username: string, password: string) => Promise<void>;
+  register: (data: any) => Promise<void>;
+  logout: () => void;
+  loadUser: () => Promise<void>;
+  updateProfile: (data: Partial<UserProfile>) => Promise<void>;
 }
 
 export const useAuthStore = create<AuthState>()(
@@ -22,73 +22,73 @@ export const useAuthStore = create<AuthState>()(
       error: null,
 
       login: async (username: string, password: string) => {
-        set({ isLoading: true, error: null })
+        set({ isLoading: true, error: null });
         try {
-          const response = await authService.login({ username, password })
-          
-          localStorage.setItem('access_token', response.access)
-          localStorage.setItem('refresh_token', response.refresh)
-          
+          const response = await authService.login({ username, password });
+
+          localStorage.setItem('access_token', response.access);
+          localStorage.setItem('refresh_token', response.refresh);
+
           // Charger le profil utilisateur
-          const user = await authService.getCurrentUser()
-          set({ user, isLoading: false })
+          const user = await authService.getCurrentUser();
+          set({ user, isLoading: false });
         } catch (error: any) {
-          set({ 
+          set({
             error: error.response?.data?.detail || 'Erreur de connexion',
-            isLoading: false 
-          })
-          throw error
+            isLoading: false,
+          });
+          throw error;
         }
       },
 
       register: async (data: any) => {
-        set({ isLoading: true, error: null })
+        set({ isLoading: true, error: null });
         try {
-          const response = await authService.register(data)
-          
-          localStorage.setItem('access_token', response.access)
-          localStorage.setItem('refresh_token', response.refresh)
-          
-          const user = await authService.getCurrentUser()
-          set({ user, isLoading: false })
+          const response = await authService.register(data);
+
+          localStorage.setItem('access_token', response.access);
+          localStorage.setItem('refresh_token', response.refresh);
+
+          const user = await authService.getCurrentUser();
+          set({ user, isLoading: false });
         } catch (error: any) {
-          set({ 
-            error: error.response?.data?.detail || 'Erreur d\'inscription',
-            isLoading: false 
-          })
-          throw error
+          set({
+            error: error.response?.data?.detail || "Erreur d'inscription",
+            isLoading: false,
+          });
+          throw error;
         }
       },
 
       logout: () => {
-        authService.logout()
-        set({ user: null })
+        authService.logout();
+        set({ user: null });
       },
 
       loadUser: async () => {
-        const token = localStorage.getItem('access_token')
-        if (!token) return
-        
-        set({ isLoading: true })
+        const token = localStorage.getItem('access_token');
+        if (!token) return;
+
+        set({ isLoading: true });
         try {
-          const user = await authService.getCurrentUser()
-          set({ user, isLoading: false })
+          const user = await authService.getCurrentUser();
+          set({ user, isLoading: false });
         } catch (error) {
-          set({ user: null, isLoading: false })
+          set({ user: null, isLoading: false });
         }
       },
 
       updateProfile: async (data: Partial<UserProfile>) => {
-        set({ isLoading: true })
+        set({ isLoading: true });
         try {
-          const updatedUser = await authService.updateProfile(data)
-          set({ user: updatedUser, isLoading: false })
+          const updatedUser = await authService.updateProfile(data);
+          set({ user: updatedUser, isLoading: false });
         } catch (error: any) {
-          set({ 
+          set({
             error: error.response?.data?.detail || 'Erreur de mise à jour',
-            isLoading: false 
-          })
-          throw error
+            isLoading: false,
+          });
+          throw error;
         }
       },
     }),
@@ -97,4 +97,4 @@ export const useAuthStore = create<AuthState>()(
       partialize: (state) => ({ user: state.user }),
     }
   )
-)
+);

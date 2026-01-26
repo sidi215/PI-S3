@@ -1,6 +1,14 @@
-import Link from 'next/link'
-import { Leaf, Facebook, Twitter, Instagram, Mail, Phone, MapPin } from 'lucide-react'
-import { Button } from '@/components/ui/button'
+import Link from 'next/link';
+import {
+  Leaf,
+  Facebook,
+  Twitter,
+  Instagram,
+  Mail,
+  Phone,
+  MapPin,
+} from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 export function SiteFooter() {
   return (
@@ -18,7 +26,8 @@ export function SiteFooter() {
               </span>
             </div>
             <p className="text-sm text-muted-foreground">
-              Plateforme numérique qui connecte directement les agriculteurs et les acheteurs en Mauritanie.
+              Plateforme numérique qui connecte directement les agriculteurs et
+              les acheteurs en Mauritanie.
             </p>
             <div className="flex gap-4">
               <Button variant="ghost" size="icon">
@@ -38,22 +47,34 @@ export function SiteFooter() {
             <h3 className="text-lg font-semibold">Liens Rapides</h3>
             <ul className="space-y-2">
               <li>
-                <Link href="/marketplace" className="text-sm text-muted-foreground hover:text-foreground">
+                <Link
+                  href="/marketplace"
+                  className="text-sm text-muted-foreground hover:text-foreground"
+                >
                   Marché des produits
                 </Link>
               </li>
               <li>
-                <Link href="/dashboard/farmer" className="text-sm text-muted-foreground hover:text-foreground">
+                <Link
+                  href="/dashboard/farmer"
+                  className="text-sm text-muted-foreground hover:text-foreground"
+                >
                   Agriculteurs
                 </Link>
               </li>
               <li>
-                <Link href="/dashboard/farmer" className="text-sm text-muted-foreground hover:text-foreground">
+                <Link
+                  href="/dashboard/farmer"
+                  className="text-sm text-muted-foreground hover:text-foreground"
+                >
                   Météo Agricole
                 </Link>
               </li>
               <li>
-                <Link href="/dashboard/farmer" className="text-sm text-muted-foreground hover:text-foreground">
+                <Link
+                  href="/dashboard/farmer"
+                  className="text-sm text-muted-foreground hover:text-foreground"
+                >
                   Statistiques
                 </Link>
               </li>
@@ -65,22 +86,34 @@ export function SiteFooter() {
             <h3 className="text-lg font-semibold">Ressources</h3>
             <ul className="space-y-2">
               <li>
-                <Link href="/blog" className="text-sm text-muted-foreground hover:text-foreground">
+                <Link
+                  href="/blog"
+                  className="text-sm text-muted-foreground hover:text-foreground"
+                >
                   Blog Agricole
                 </Link>
               </li>
               <li>
-                <Link href="/guides" className="text-sm text-muted-foreground hover:text-foreground">
+                <Link
+                  href="/guides"
+                  className="text-sm text-muted-foreground hover:text-foreground"
+                >
                   Guides de culture
                 </Link>
               </li>
               <li>
-                <Link href="/faq" className="text-sm text-muted-foreground hover:text-foreground">
+                <Link
+                  href="/faq"
+                  className="text-sm text-muted-foreground hover:text-foreground"
+                >
                   FAQ
                 </Link>
               </li>
               <li>
-                <Link href="/terms" className="text-sm text-muted-foreground hover:text-foreground">
+                <Link
+                  href="/terms"
+                  className="text-sm text-muted-foreground hover:text-foreground"
+                >
                   Conditions d'utilisation
                 </Link>
               </li>
@@ -114,7 +147,8 @@ export function SiteFooter() {
 
         <div className="mt-12 border-t pt-8 text-center">
           <p className="text-sm text-muted-foreground">
-            © {new Date().getFullYear()} BetterAgri Mauritanie. Tous droits réservés.
+            © {new Date().getFullYear()} BetterAgri Mauritanie. Tous droits
+            réservés.
           </p>
           <p className="mt-2 text-xs text-muted-foreground">
             Développé avec ❤️ pour l'agriculture mauritanienne
@@ -122,5 +156,5 @@ export function SiteFooter() {
         </div>
       </div>
     </footer>
-  )
+  );
 }

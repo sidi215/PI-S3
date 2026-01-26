@@ -1,30 +1,38 @@
-'use client'
+'use client';
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { UserPlus, ShoppingCart, Truck, Star } from 'lucide-react'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { UserPlus, ShoppingCart, Truck, Star } from 'lucide-react';
 
 const steps = [
   {
     icon: UserPlus,
-    title: "1. Inscription",
-    description: "Créez votre compte gratuitement en tant qu'agriculteur ou acheteur."
+    title: '1. Inscription',
+    description:
+      "Créez votre compte gratuitement en tant qu'agriculteur ou acheteur.",
   },
   {
     icon: ShoppingCart,
-    title: "2. Explorez le marché",
-    description: "Parcourez les produits disponibles ou listez vos propres produits."
+    title: '2. Explorez le marché',
+    description:
+      'Parcourez les produits disponibles ou listez vos propres produits.',
   },
   {
     icon: Truck,
-    title: "3. Commandez/Livrez",
-    description: "Passez vos commandes en ligne ou organisez vos livraisons."
+    title: '3. Commandez/Livrez',
+    description: 'Passez vos commandes en ligne ou organisez vos livraisons.',
   },
   {
     icon: Star,
-    title: "4. Évaluez",
-    description: "Donnez votre avis et construisez votre réputation."
-  }
-]
+    title: '4. Évaluez',
+    description: 'Donnez votre avis et construisez votre réputation.',
+  },
+];
 
 export function HowItWorks() {
   return (
@@ -41,7 +49,10 @@ export function HowItWorks() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {steps.map((step, index) => (
-            <Card key={step.title} className="border-0 shadow-md hover:shadow-lg transition-shadow">
+            <Card
+              key={step.title}
+              className="border-0 shadow-md hover:shadow-lg transition-shadow"
+            >
               <CardHeader>
                 <div className="flex items-center gap-4">
                   <div className="relative">
@@ -65,5 +76,5 @@ export function HowItWorks() {
         </div>
       </div>
     </section>
-  )
+  );
 }

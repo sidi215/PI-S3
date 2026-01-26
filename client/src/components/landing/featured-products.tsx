@@ -1,48 +1,55 @@
-'use client'
+'use client';
 
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { ShoppingCart, Star } from 'lucide-react'
-import { Badge } from '@/components/ui/badge'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { ShoppingCart, Star } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
 
 const products = [
   {
     id: 1,
-    name: "Tomates Fraîches",
-    farmer: "Mohamed Ahmed",
-    price: "450 MRU/kg",
+    name: 'Tomates Fraîches',
+    farmer: 'Mohamed Ahmed',
+    price: '450 MRU/kg',
     rating: 4.5,
-    category: "Légumes",
+    category: 'Légumes',
     organic: true,
   },
   {
     id: 2,
-    name: "Oignons Locaux",
-    farmer: "Aminata Sow",
-    price: "300 MRU/kg",
+    name: 'Oignons Locaux',
+    farmer: 'Aminata Sow',
+    price: '300 MRU/kg',
     rating: 4.2,
-    category: "Légumes",
+    category: 'Légumes',
     organic: true,
   },
   {
     id: 3,
-    name: "Carottes",
-    farmer: "Ibrahim Ba",
-    price: "400 MRU/kg",
+    name: 'Carottes',
+    farmer: 'Ibrahim Ba',
+    price: '400 MRU/kg',
     rating: 4.7,
-    category: "Légumes",
+    category: 'Légumes',
     organic: false,
   },
   {
     id: 4,
-    name: "Miel Naturel",
-    farmer: "Bees of Mauritania",
-    price: "2,500 MRU/kg",
+    name: 'Miel Naturel',
+    farmer: 'Bees of Mauritania',
+    price: '2,500 MRU/kg',
     rating: 4.9,
-    category: "Autres",
+    category: 'Autres',
     organic: true,
   },
-]
+];
 
 export function FeaturedProducts() {
   return (
@@ -59,7 +66,10 @@ export function FeaturedProducts() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {products.map((product) => (
-            <Card key={product.id} className="hover:shadow-lg transition-shadow">
+            <Card
+              key={product.id}
+              className="hover:shadow-lg transition-shadow"
+            >
               <div className="h-32 bg-gradient-to-br from-green-100 to-emerald-100 rounded-t-lg flex items-center justify-center">
                 <span className="text-4xl">
                   {product.name.includes('Tomates') && '🍅'}
@@ -85,8 +95,8 @@ export function FeaturedProducts() {
                         key={i}
                         className={`h-4 w-4 ${
                           i < Math.floor(product.rating)
-                            ? "fill-yellow-400 text-yellow-400"
-                            : "text-gray-300"
+                            ? 'fill-yellow-400 text-yellow-400'
+                            : 'text-gray-300'
                         }`}
                       />
                     ))}
@@ -94,7 +104,9 @@ export function FeaturedProducts() {
                       {product.rating}
                     </span>
                   </div>
-                  <span className="font-bold text-primary">{product.price}</span>
+                  <span className="font-bold text-primary">
+                    {product.price}
+                  </span>
                 </div>
               </CardContent>
               <CardFooter>
@@ -108,5 +120,5 @@ export function FeaturedProducts() {
         </div>
       </div>
     </section>
-  )
+  );
 }

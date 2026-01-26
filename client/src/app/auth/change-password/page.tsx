@@ -1,38 +1,49 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
-import Link from 'next/link'
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import * as z from 'zod'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
-import { Label } from '@/components/ui/label'
-import { Leaf, Eye, EyeOff, CheckCircle, AlertCircle } from 'lucide-react'
-import { useAuthStore } from '@/stores/auth.store'
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { Label } from '@/components/ui/label';
+import { Leaf, Eye, EyeOff, CheckCircle, AlertCircle } from 'lucide-react';
+import { useAuthStore } from '@/stores/auth.store';
 
-const changePasswordSchema = z.object({
-  old_password: z.string().min(1, 'L\'ancien mot de passe est requis'),
-  new_password: z.string().min(6, 'Le nouveau mot de passe doit contenir au moins 6 caractères'),
-  confirm_password: z.string().min(1, 'La confirmation est requise'),
-}).refine((data) => data.new_password === data.confirm_password, {
-  message: "Les nouveaux mots de passe ne correspondent pas",
-  path: ["confirm_password"],
-})
+const changePasswordSchema = z
+  .object({
+    old_password: z.string().min(1, "L'ancien mot de passe est requis"),
+    new_password: z
+      .string()
+      .min(6, 'Le nouveau mot de passe doit contenir au moins 6 caractères'),
+    confirm_password: z.string().min(1, 'La confirmation est requise'),
+  })
+  .refine((data) => data.new_password === data.confirm_password, {
+    message: 'Les nouveaux mots de passe ne correspondent pas',
+    path: ['confirm_password'],
+  });
 
-type ChangePasswordFormValues = z.infer<typeof changePasswordSchema>
+type ChangePasswordFormValues = z.infer<typeof changePasswordSchema>;
 
 export default function ChangePasswordPage() {
-  const router = useRouter()
-  const { user } = useAuthStore()
-  const [isLoading, setIsLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-  const [success, setSuccess] = useState(false)
-  const [showOldPassword, setShowOldPassword] = useState(false)
-  const [showNewPassword, setShowNewPassword] = useState(false)
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
+  const router = useRouter();
+  const { user } = useAuthStore();
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState(false);
+  const [showOldPassword, setShowOldPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const form = useForm<ChangePasswordFormValues>({
     resolver: zodResolver(changePasswordSchema),
@@ -41,49 +52,56 @@ export default function ChangePasswordPage() {
       new_password: '',
       confirm_password: '',
     },
-  })
+  });
 
   async function onSubmit(data: ChangePasswordFormValues) {
     if (!user) {
-      router.push('/auth/login')
-      return
+      router.push('/auth/login');
+      return;
     }
 
-    setIsLoading(true)
-    setError(null)
-    setSuccess(false)
+    setIsLoading(true);
+    setError(null);
+    setSuccess(false);
 
     try {
-      const response = await fetch('http://localhost:8000/api/auth/change-password/', {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('access')}`,
-        },
-        body: JSON.stringify({
-          old_password: data.old_password,
-          new_password: data.new_password,
-        }),
-      })
+      const response = await fetch(
+        'http://localhost:8000/api/auth/change-password/',
+        {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${localStorage.getItem('access')}`,
+          },
+          body: JSON.stringify({
+            old_password: data.old_password,
+            new_password: data.new_password,
+          }),
+        }
+      );
 
-      const result = await response.json()
+      const result = await response.json();
 
       if (response.ok) {
-        setSuccess(true)
-        form.reset()
-        
+        setSuccess(true);
+        form.reset();
+
         // Rediriger après 2 secondes
         setTimeout(() => {
-          router.push('/dashboard')
-        }, 2000)
+          router.push('/dashboard');
+        }, 2000);
       } else {
-        setError(result.old_password?.[0] || result.error || 'Erreur lors du changement de mot de passe')
+        setError(
+          result.old_password?.[0] ||
+            result.error ||
+            'Erreur lors du changement de mot de passe'
+        );
       }
     } catch (err: any) {
-      setError('Erreur de connexion au serveur')
-      console.error(err)
+      setError('Erreur de connexion au serveur');
+      console.error(err);
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
   }
 
@@ -101,7 +119,7 @@ export default function ChangePasswordPage() {
             Mettez à jour votre mot de passe pour sécuriser votre compte
           </p>
         </div>
-        
+
         <Card>
           <CardHeader>
             <CardTitle>Modification du mot de passe</CardTitle>
@@ -130,17 +148,17 @@ export default function ChangePasswordPage() {
                 <span>{error}</span>
               </div>
             )}
-            
+
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="old_password">Mot de passe actuel</Label>
                 <div className="relative">
                   <Input
                     id="old_password"
-                    type={showOldPassword ? "text" : "password"}
+                    type={showOldPassword ? 'text' : 'password'}
                     placeholder="••••••••"
                     disabled={isLoading}
-                    {...form.register("old_password")}
+                    {...form.register('old_password')}
                   />
                   <Button
                     type="button"
@@ -168,10 +186,10 @@ export default function ChangePasswordPage() {
                 <div className="relative">
                   <Input
                     id="new_password"
-                    type={showNewPassword ? "text" : "password"}
+                    type={showNewPassword ? 'text' : 'password'}
                     placeholder="••••••••"
                     disabled={isLoading}
-                    {...form.register("new_password")}
+                    {...form.register('new_password')}
                   />
                   <Button
                     type="button"
@@ -198,14 +216,16 @@ export default function ChangePasswordPage() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="confirm_password">Confirmer le nouveau mot de passe</Label>
+                <Label htmlFor="confirm_password">
+                  Confirmer le nouveau mot de passe
+                </Label>
                 <div className="relative">
                   <Input
                     id="confirm_password"
-                    type={showConfirmPassword ? "text" : "password"}
+                    type={showConfirmPassword ? 'text' : 'password'}
                     placeholder="••••••••"
                     disabled={isLoading}
-                    {...form.register("confirm_password")}
+                    {...form.register('confirm_password')}
                   />
                   <Button
                     type="button"
@@ -228,8 +248,12 @@ export default function ChangePasswordPage() {
                 )}
               </div>
 
-              <Button className="w-full" type="submit" disabled={isLoading || success}>
-                {isLoading ? "Modification..." : "Modifier le mot de passe"}
+              <Button
+                className="w-full"
+                type="submit"
+                disabled={isLoading || success}
+              >
+                {isLoading ? 'Modification...' : 'Modifier le mot de passe'}
               </Button>
             </form>
           </CardContent>
@@ -246,5 +270,5 @@ export default function ChangePasswordPage() {
         </Card>
       </div>
     </div>
-  )
+  );
 }

@@ -1,65 +1,77 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import * as z from 'zod'
-import Link from 'next/link'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
-import { Label } from '@/components/ui/label'
-import { Leaf, Mail, CheckCircle, AlertCircle } from 'lucide-react'
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { Label } from '@/components/ui/label';
+import { Leaf, Mail, CheckCircle, AlertCircle } from 'lucide-react';
 
 const passwordResetSchema = z.object({
   email: z.string().email('Email invalide'),
-})
+});
 
-type PasswordResetFormValues = z.infer<typeof passwordResetSchema>
+type PasswordResetFormValues = z.infer<typeof passwordResetSchema>;
 
 export default function PasswordResetPage() {
-  const [isLoading, setIsLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-  const [success, setSuccess] = useState(false)
-  const [sentEmail, setSentEmail] = useState('')
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState(false);
+  const [sentEmail, setSentEmail] = useState('');
 
   const form = useForm<PasswordResetFormValues>({
     resolver: zodResolver(passwordResetSchema),
     defaultValues: {
       email: '',
     },
-  })
+  });
 
   async function onSubmit(data: PasswordResetFormValues) {
-    setIsLoading(true)
-    setError(null)
-    setSuccess(false)
+    setIsLoading(true);
+    setError(null);
+    setSuccess(false);
 
     try {
-      const response = await fetch('http://localhost:8000/api/accounts/password-reset/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email: data.email,
-        }),
-      })
+      const response = await fetch(
+        'http://localhost:8000/api/accounts/password-reset/',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            email: data.email,
+          }),
+        }
+      );
 
-      const result = await response.json()
+      const result = await response.json();
 
       if (response.ok) {
-        setSuccess(true)
-        setSentEmail(data.email)
-        form.reset()
+        setSuccess(true);
+        setSentEmail(data.email);
+        form.reset();
       } else {
-        setError(result.error || 'Erreur lors de la demande de réinitialisation')
+        setError(
+          result.error || 'Erreur lors de la demande de réinitialisation'
+        );
       }
     } catch (err: any) {
-      setError('Erreur de connexion au serveur')
-      console.error(err)
+      setError('Erreur de connexion au serveur');
+      console.error(err);
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
   }
 
@@ -77,7 +89,7 @@ export default function PasswordResetPage() {
             Entrez votre email pour recevoir un lien de réinitialisation
           </p>
         </div>
-        
+
         <Card>
           <CardHeader>
             <CardTitle>Réinitialiser le mot de passe</CardTitle>
@@ -94,8 +106,9 @@ export default function PasswordResetPage() {
                     Email envoyé avec succès !
                   </p>
                   <p className="text-sm text-green-700">
-                    Nous avons envoyé un lien de réinitialisation à <strong>{sentEmail}</strong>.
-                    Vérifiez votre boîte de réception (et vos spams).
+                    Nous avons envoyé un lien de réinitialisation à{' '}
+                    <strong>{sentEmail}</strong>. Vérifiez votre boîte de
+                    réception (et vos spams).
                   </p>
                 </div>
               </div>
@@ -107,9 +120,12 @@ export default function PasswordResetPage() {
                 <span>{error}</span>
               </div>
             )}
-            
+
             {!success && (
-              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+              <form
+                onSubmit={form.handleSubmit(onSubmit)}
+                className="space-y-4"
+              >
                 <div className="space-y-2">
                   <Label htmlFor="email">Email</Label>
                   <div className="relative">
@@ -120,7 +136,7 @@ export default function PasswordResetPage() {
                       placeholder="nom@exemple.com"
                       className="pl-10"
                       disabled={isLoading}
-                      {...form.register("email")}
+                      {...form.register('email')}
                     />
                   </div>
                   {form.formState.errors.email && (
@@ -131,7 +147,9 @@ export default function PasswordResetPage() {
                 </div>
 
                 <Button className="w-full" type="submit" disabled={isLoading}>
-                  {isLoading ? "Envoi..." : "Envoyer le lien de réinitialisation"}
+                  {isLoading
+                    ? 'Envoi...'
+                    : 'Envoyer le lien de réinitialisation'}
                 </Button>
               </form>
             )}
@@ -140,14 +158,14 @@ export default function PasswordResetPage() {
               <div className="space-y-4">
                 <div className="rounded-lg border p-4 text-center">
                   <p className="text-sm text-muted-foreground">
-                    Le lien est valable 24 heures. Si vous ne recevez pas l'email,
-                    vérifiez vos spams ou réessayez.
+                    Le lien est valable 24 heures. Si vous ne recevez pas
+                    l'email, vérifiez vos spams ou réessayez.
                   </p>
                 </div>
                 <Button
                   onClick={() => {
-                    setSuccess(false)
-                    setSentEmail('')
+                    setSuccess(false);
+                    setSentEmail('');
                   }}
                   variant="outline"
                   className="w-full"
@@ -167,7 +185,7 @@ export default function PasswordResetPage() {
               </Link>
             </div>
             <div className="text-sm text-muted-foreground text-center">
-              Pas encore de compte ?{" "}
+              Pas encore de compte ?{' '}
               <Link
                 href="/auth/register"
                 className="underline underline-offset-4 hover:text-primary"
@@ -179,5 +197,5 @@ export default function PasswordResetPage() {
         </Card>
       </div>
     </div>
-  )
+  );
 }

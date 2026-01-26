@@ -1,56 +1,63 @@
-'use client'
+'use client';
 
-import { useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
-import Link from 'next/link'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
-import { Leaf, LogOut, AlertCircle, CheckCircle } from 'lucide-react'
-import { useAuthStore } from '@/stores/auth.store'
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { Leaf, LogOut, AlertCircle, CheckCircle } from 'lucide-react';
+import { useAuthStore } from '@/stores/auth.store';
 
 export default function LogoutPage() {
-  const router = useRouter()
-  const { logout, isLoading } = useAuthStore()
-  const [isLoggingOut, setIsLoggingOut] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-  const [success, setSuccess] = useState(false)
+  const router = useRouter();
+  const { logout, isLoading } = useAuthStore();
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState(false);
 
   useEffect(() => {
     // Déconnexion automatique après 3 secondes
     const autoLogout = async () => {
       try {
-        setIsLoggingOut(true)
-        await logout()
-        setSuccess(true)
-        
+        setIsLoggingOut(true);
+        await logout();
+        setSuccess(true);
+
         // Redirection après 2 secondes
         setTimeout(() => {
-          router.push('/auth/login')
-        }, 2000)
+          router.push('/auth/login');
+        }, 2000);
       } catch (err: any) {
-        setError(err.message || 'Erreur lors de la déconnexion')
-        setIsLoggingOut(false)
+        setError(err.message || 'Erreur lors de la déconnexion');
+        setIsLoggingOut(false);
       }
-    }
+    };
 
-    autoLogout()
-  }, [logout, router])
+    autoLogout();
+  }, [logout, router]);
 
   const handleManualLogout = async () => {
     try {
-      setIsLoggingOut(true)
-      setError(null)
-      await logout()
-      setSuccess(true)
-      
+      setIsLoggingOut(true);
+      setError(null);
+      await logout();
+      setSuccess(true);
+
       setTimeout(() => {
-        router.push('/auth/login')
-      }, 1000)
+        router.push('/auth/login');
+      }, 1000);
     } catch (err: any) {
-      setError(err.message || 'Erreur lors de la déconnexion')
-      setIsLoggingOut(false)
+      setError(err.message || 'Erreur lors de la déconnexion');
+      setIsLoggingOut(false);
     }
-  }
+  };
 
   return (
     <div className="container flex min-h-screen items-center justify-center py-12">
@@ -59,14 +66,12 @@ export default function LogoutPage() {
           <div className="mx-auto">
             <Leaf className="h-12 w-12 text-primary" />
           </div>
-          <h1 className="text-2xl font-semibold tracking-tight">
-            Déconnexion
-          </h1>
+          <h1 className="text-2xl font-semibold tracking-tight">Déconnexion</h1>
           <p className="text-sm text-muted-foreground">
             Vous êtes en train de vous déconnecter
           </p>
         </div>
-        
+
         <Card>
           <CardHeader>
             <CardTitle>Déconnexion en cours</CardTitle>
@@ -99,10 +104,9 @@ export default function LogoutPage() {
                 <div className="flex flex-col items-center justify-center space-y-3 py-4">
                   <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
                   <p className="text-sm text-muted-foreground text-center">
-                    {isLoggingOut 
-                      ? 'Fermeture de votre session...' 
-                      : 'Préparation de la déconnexion...'
-                    }
+                    {isLoggingOut
+                      ? 'Fermeture de votre session...'
+                      : 'Préparation de la déconnexion...'}
                   </p>
                 </div>
 
@@ -111,8 +115,8 @@ export default function LogoutPage() {
                     <p className="text-sm text-muted-foreground text-center">
                       La déconnexion automatique n'a pas fonctionné
                     </p>
-                    <Button 
-                      onClick={handleManualLogout} 
+                    <Button
+                      onClick={handleManualLogout}
                       disabled={isLoading}
                       className="w-full gap-2"
                     >
@@ -137,5 +141,5 @@ export default function LogoutPage() {
         </Card>
       </div>
     </div>
-  )
+  );
 }

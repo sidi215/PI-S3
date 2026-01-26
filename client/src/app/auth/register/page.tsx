@@ -1,42 +1,63 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
-import Link from 'next/link'
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import * as z from 'zod'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
-import { Label } from '@/components/ui/label'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { Leaf } from 'lucide-react'
-import { useAuthStore } from '@/stores/auth.store'
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { Label } from '@/components/ui/label';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { Leaf } from 'lucide-react';
+import { useAuthStore } from '@/stores/auth.store';
 
-const registerSchema = z.object({
-  username: z.string().min(3, 'Le nom d\'utilisateur doit contenir au moins 3 caractères'),
-  email: z.string().email('Email invalide'),
-  password: z.string().min(6, 'Le mot de passe doit contenir au moins 6 caractères'),
-  password2: z.string().min(6, 'La confirmation du mot de passe est requise'),
-  user_type: z.enum(['farmer', 'buyer']),
-  first_name: z.string().min(1, 'Le prénom est requis'),
-  last_name: z.string().min(1, 'Le nom est requis'),
-  phone_number: z.string().min(1, 'Le numéro de téléphone est requis'),
-  wilaya: z.string().optional(),
-  city: z.string().optional(),
-}).refine((data) => data.password === data.password2, {
-  message: "Les mots de passe ne correspondent pas",
-  path: ["password2"],
-})
+const registerSchema = z
+  .object({
+    username: z
+      .string()
+      .min(3, "Le nom d'utilisateur doit contenir au moins 3 caractères"),
+    email: z.string().email('Email invalide'),
+    password: z
+      .string()
+      .min(6, 'Le mot de passe doit contenir au moins 6 caractères'),
+    password2: z.string().min(6, 'La confirmation du mot de passe est requise'),
+    user_type: z.enum(['farmer', 'buyer']),
+    first_name: z.string().min(1, 'Le prénom est requis'),
+    last_name: z.string().min(1, 'Le nom est requis'),
+    phone_number: z.string().min(1, 'Le numéro de téléphone est requis'),
+    wilaya: z.string().optional(),
+    city: z.string().optional(),
+  })
+  .refine((data) => data.password === data.password2, {
+    message: 'Les mots de passe ne correspondent pas',
+    path: ['password2'],
+  });
 
-type RegisterFormValues = z.infer<typeof registerSchema>
+type RegisterFormValues = z.infer<typeof registerSchema>;
 
 export default function RegisterPage() {
-  const router = useRouter()
-  const { register: registerUser, isLoading, error } = useAuthStore()
-  const [registrationError, setRegistrationError] = useState<string | null>(null)
-  const [userType, setUserType] = useState<'farmer' | 'buyer'>('farmer')
+  const router = useRouter();
+  const { register: registerUser, isLoading, error } = useAuthStore();
+  const [registrationError, setRegistrationError] = useState<string | null>(
+    null
+  );
+  const [userType, setUserType] = useState<'farmer' | 'buyer'>('farmer');
 
   const form = useForm<RegisterFormValues>({
     resolver: zodResolver(registerSchema),
@@ -52,22 +73,22 @@ export default function RegisterPage() {
       wilaya: '',
       city: '',
     },
-  })
+  });
 
   async function onSubmit(data: RegisterFormValues) {
-    setRegistrationError(null)
+    setRegistrationError(null);
     try {
-      await registerUser(data)
-      
+      await registerUser(data);
+
       // Rediriger selon le type d'utilisateur
-      const user = useAuthStore.getState().user
+      const user = useAuthStore.getState().user;
       if (user?.user_type === 'farmer') {
-        router.push('/dashboard/farmer')
+        router.push('/dashboard/farmer');
       } else if (user?.user_type === 'buyer') {
-        router.push('/dashboard/buyer')
+        router.push('/dashboard/buyer');
       }
     } catch (error: any) {
-      setRegistrationError(error.message || 'Erreur d\'inscription')
+      setRegistrationError(error.message || "Erreur d'inscription");
     }
   }
 
@@ -85,7 +106,7 @@ export default function RegisterPage() {
             Rejoignez la communauté agricole de Mauritanie
           </p>
         </div>
-        
+
         <Card>
           <CardHeader>
             <CardTitle>Inscription</CardTitle>
@@ -99,7 +120,7 @@ export default function RegisterPage() {
                 {registrationError || error}
               </div>
             )}
-            
+
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
@@ -108,7 +129,7 @@ export default function RegisterPage() {
                     id="first_name"
                     placeholder="Mohamed"
                     disabled={isLoading}
-                    {...form.register("first_name")}
+                    {...form.register('first_name')}
                   />
                   {form.formState.errors.first_name && (
                     <p className="text-sm text-destructive">
@@ -122,7 +143,7 @@ export default function RegisterPage() {
                     id="last_name"
                     placeholder="Ahmed"
                     disabled={isLoading}
-                    {...form.register("last_name")}
+                    {...form.register('last_name')}
                   />
                   {form.formState.errors.last_name && (
                     <p className="text-sm text-destructive">
@@ -140,7 +161,7 @@ export default function RegisterPage() {
                   autoCapitalize="none"
                   autoComplete="username"
                   disabled={isLoading}
-                  {...form.register("username")}
+                  {...form.register('username')}
                 />
                 {form.formState.errors.username && (
                   <p className="text-sm text-destructive">
@@ -158,7 +179,7 @@ export default function RegisterPage() {
                   autoCapitalize="none"
                   autoComplete="email"
                   disabled={isLoading}
-                  {...form.register("email")}
+                  {...form.register('email')}
                 />
                 {form.formState.errors.email && (
                   <p className="text-sm text-destructive">
@@ -173,7 +194,7 @@ export default function RegisterPage() {
                   id="phone_number"
                   placeholder="+22212345678"
                   disabled={isLoading}
-                  {...form.register("phone_number")}
+                  {...form.register('phone_number')}
                 />
                 {form.formState.errors.phone_number && (
                   <p className="text-sm text-destructive">
@@ -186,8 +207,8 @@ export default function RegisterPage() {
                 <Label htmlFor="user_type">Type de compte</Label>
                 <Select
                   onValueChange={(value: 'farmer' | 'buyer') => {
-                    setUserType(value)
-                    form.setValue('user_type', value)
+                    setUserType(value);
+                    form.setValue('user_type', value);
                   }}
                   defaultValue="farmer"
                 >
@@ -214,7 +235,7 @@ export default function RegisterPage() {
                       id="wilaya"
                       placeholder="Brakna"
                       disabled={isLoading}
-                      {...form.register("wilaya")}
+                      {...form.register('wilaya')}
                     />
                   </div>
                   <div className="space-y-2">
@@ -223,7 +244,7 @@ export default function RegisterPage() {
                       id="city"
                       placeholder="Aleg"
                       disabled={isLoading}
-                      {...form.register("city")}
+                      {...form.register('city')}
                     />
                   </div>
                 </>
@@ -237,7 +258,7 @@ export default function RegisterPage() {
                     placeholder="••••••••"
                     type="password"
                     disabled={isLoading}
-                    {...form.register("password")}
+                    {...form.register('password')}
                   />
                   {form.formState.errors.password && (
                     <p className="text-sm text-destructive">
@@ -252,7 +273,7 @@ export default function RegisterPage() {
                     placeholder="••••••••"
                     type="password"
                     disabled={isLoading}
-                    {...form.register("password2")}
+                    {...form.register('password2')}
                   />
                   {form.formState.errors.password2 && (
                     <p className="text-sm text-destructive">
@@ -263,13 +284,13 @@ export default function RegisterPage() {
               </div>
 
               <Button className="w-full" type="submit" disabled={isLoading}>
-                {isLoading ? "Inscription..." : "S'inscrire"}
+                {isLoading ? 'Inscription...' : "S'inscrire"}
               </Button>
             </form>
           </CardContent>
           <CardFooter>
             <div className="text-sm text-muted-foreground text-center w-full">
-              Déjà un compte ?{" "}
+              Déjà un compte ?{' '}
               <Link
                 href="/auth/login"
                 className="underline underline-offset-4 hover:text-primary"
@@ -281,5 +302,5 @@ export default function RegisterPage() {
         </Card>
       </div>
     </div>
-  )
+  );
 }

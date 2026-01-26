@@ -1,32 +1,41 @@
-'use client'
+'use client';
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Star } from 'lucide-react'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { Star } from 'lucide-react';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 const testimonials = [
   {
-    name: "Mohamed Ahmed",
-    role: "Agriculteur, Trarza",
-    content: "Grâce à BetterAgri, j'ai augmenté mes ventes de 40% en seulement 3 mois. Je peux maintenant vendre directement aux consommateurs sans intermédiaires.",
+    name: 'Mohamed Ahmed',
+    role: 'Agriculteur, Trarza',
+    content:
+      "Grâce à BetterAgri, j'ai augmenté mes ventes de 40% en seulement 3 mois. Je peux maintenant vendre directement aux consommateurs sans intermédiaires.",
     rating: 5,
-    avatar: "MA"
+    avatar: 'MA',
   },
   {
-    name: "Aminata Sow",
-    role: "Acheteuse, Nouakchott",
-    content: "Je trouve toujours des produits frais et de qualité à des prix compétitifs. Le service de livraison est excellent !",
+    name: 'Aminata Sow',
+    role: 'Acheteuse, Nouakchott',
+    content:
+      'Je trouve toujours des produits frais et de qualité à des prix compétitifs. Le service de livraison est excellent !',
     rating: 5,
-    avatar: "AS"
+    avatar: 'AS',
   },
   {
-    name: "Ibrahim Ba",
-    role: "Agriculteur, Guidimakha",
-    content: "La plateforme est très intuitive. Les outils d'analytics m'aident à mieux planifier ma production selon la demande.",
+    name: 'Ibrahim Ba',
+    role: 'Agriculteur, Guidimakha',
+    content:
+      "La plateforme est très intuitive. Les outils d'analytics m'aident à mieux planifier ma production selon la demande.",
     rating: 4,
-    avatar: "IB"
-  }
-]
+    avatar: 'IB',
+  },
+];
 
 export function Testimonials() {
   return (
@@ -43,7 +52,10 @@ export function Testimonials() {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {testimonials.map((testimonial) => (
-            <Card key={testimonial.name} className="hover:shadow-lg transition-shadow">
+            <Card
+              key={testimonial.name}
+              className="hover:shadow-lg transition-shadow"
+            >
               <CardHeader>
                 <div className="flex items-center gap-4">
                   <Avatar>
@@ -62,18 +74,20 @@ export function Testimonials() {
                       key={i}
                       className={`h-4 w-4 ${
                         i < testimonial.rating
-                          ? "fill-yellow-400 text-yellow-400"
-                          : "text-gray-300"
+                          ? 'fill-yellow-400 text-yellow-400'
+                          : 'text-gray-300'
                       }`}
                     />
                   ))}
                 </div>
-                <p className="text-muted-foreground italic">"{testimonial.content}"</p>
+                <p className="text-muted-foreground italic">
+                  "{testimonial.content}"
+                </p>
               </CardContent>
             </Card>
           ))}
         </div>
       </div>
     </section>
-  )
+  );
 }

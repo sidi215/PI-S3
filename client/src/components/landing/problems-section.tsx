@@ -1,36 +1,42 @@
-'use client'
+'use client';
 
-import { Card, CardContent } from '@/components/ui/card'
-import { motion } from 'framer-motion'
-import { AlertTriangle, Droplets, TrendingDown, Eye, Smartphone } from 'lucide-react'
+import { Card, CardContent } from '@/components/ui/card';
+import { motion } from 'framer-motion';
+import {
+  AlertTriangle,
+  Droplets,
+  TrendingDown,
+  Eye,
+  Smartphone,
+} from 'lucide-react';
 
 const problems = [
   {
     icon: <AlertTriangle className="h-6 w-6" />,
-    title: "Maladies des cultures",
-    description: "Difficulté à détecter les maladies des cultures à temps"
+    title: 'Maladies des cultures',
+    description: 'Difficulté à détecter les maladies des cultures à temps',
   },
   {
     icon: <Droplets className="h-6 w-6" />,
     title: "Gestion de l'eau",
-    description: "Mauvaise gestion de l'eau dans un contexte de sécheresse"
+    description: "Mauvaise gestion de l'eau dans un contexte de sécheresse",
   },
   {
     icon: <TrendingDown className="h-6 w-6" />,
-    title: "Intermédiaires",
-    description: "Dépendance aux intermédiaires pour vendre les produits"
+    title: 'Intermédiaires',
+    description: 'Dépendance aux intermédiaires pour vendre les produits',
   },
   {
     icon: <Eye className="h-6 w-6" />,
-    title: "Visibilité limitée",
-    description: "Manque de visibilité sur les prix du marché"
+    title: 'Visibilité limitée',
+    description: 'Manque de visibilité sur les prix du marché',
   },
   {
     icon: <Smartphone className="h-6 w-6" />,
-    title: "Outils numériques",
-    description: "Peu d'outils numériques simples et accessibles"
-  }
-]
+    title: 'Outils numériques',
+    description: "Peu d'outils numériques simples et accessibles",
+  },
+];
 
 export function ProblemsSection() {
   return (
@@ -44,11 +50,15 @@ export function ProblemsSection() {
           className="text-center mb-12"
         >
           <h2 className="text-3xl font-bold mb-4">
-            Les défis quotidiens des 
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-600 to-orange-600"> agriculteurs</span>
+            Les défis quotidiens des
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-600 to-orange-600">
+              {' '}
+              agriculteurs
+            </span>
           </h2>
           <p className="text-muted-foreground text-lg max-w-3xl mx-auto">
-            L'agriculture aujourd'hui est difficile, surtout sans outils adaptés aux réalités locales.
+            L'agriculture aujourd'hui est difficile, surtout sans outils adaptés
+            aux réalités locales.
           </p>
         </motion.div>
 
@@ -67,7 +77,9 @@ export function ProblemsSection() {
                     {problem.icon}
                   </div>
                   <h3 className="font-bold mb-2">{problem.title}</h3>
-                  <p className="text-sm text-muted-foreground">{problem.description}</p>
+                  <p className="text-sm text-muted-foreground">
+                    {problem.description}
+                  </p>
                 </CardContent>
               </Card>
             </motion.div>
@@ -75,5 +87,5 @@ export function ProblemsSection() {
         </div>
       </div>
     </section>
-  )
+  );
 }

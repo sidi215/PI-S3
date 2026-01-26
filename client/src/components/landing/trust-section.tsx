@@ -1,31 +1,31 @@
-'use client'
+'use client';
 
-import { Card, CardContent } from '@/components/ui/card'
-import { motion } from 'framer-motion'
-import { Lock, Shield, CheckCircle, Package } from 'lucide-react'
+import { Card, CardContent } from '@/components/ui/card';
+import { motion } from 'framer-motion';
+import { Lock, Shield, CheckCircle, Package } from 'lucide-react';
 
 const trustFactors = [
   {
     icon: <Lock className="h-6 w-6" />,
-    title: "Données protégées",
-    description: "Vos données agricoles sont sécurisées et confidentielles"
+    title: 'Données protégées',
+    description: 'Vos données agricoles sont sécurisées et confidentielles',
   },
   {
     icon: <Shield className="h-6 w-6" />,
-    title: "Paiements sécurisés",
-    description: "Transactions bancaires garanties et sans risque"
+    title: 'Paiements sécurisés',
+    description: 'Transactions bancaires garanties et sans risque',
   },
   {
     icon: <CheckCircle className="h-6 w-6" />,
-    title: "Profils vérifiés",
-    description: "Tous les agriculteurs et acheteurs sont authentifiés"
+    title: 'Profils vérifiés',
+    description: 'Tous les agriculteurs et acheteurs sont authentifiés',
   },
   {
     icon: <Package className="h-6 w-6" />,
-    title: "Suivi des commandes",
-    description: "Traçabilité complète de chaque transaction"
-  }
-]
+    title: 'Suivi des commandes',
+    description: 'Traçabilité complète de chaque transaction',
+  },
+];
 
 export function TrustSection() {
   return (
@@ -39,11 +39,15 @@ export function TrustSection() {
           className="text-center mb-12"
         >
           <h2 className="text-3xl font-bold mb-4">
-            Une plateforme 
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600"> fiable et sécurisée</span>
+            Une plateforme
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">
+              {' '}
+              fiable et sécurisée
+            </span>
           </h2>
           <p className="text-muted-foreground text-lg max-w-3xl mx-auto">
-            Nous mettons tout en œuvre pour garantir la sécurité et la confiance de nos utilisateurs.
+            Nous mettons tout en œuvre pour garantir la sécurité et la confiance
+            de nos utilisateurs.
           </p>
         </motion.div>
 
@@ -62,7 +66,9 @@ export function TrustSection() {
                     {factor.icon}
                   </div>
                   <h3 className="font-bold mb-2">{factor.title}</h3>
-                  <p className="text-sm text-muted-foreground">{factor.description}</p>
+                  <p className="text-sm text-muted-foreground">
+                    {factor.description}
+                  </p>
                 </CardContent>
               </Card>
             </motion.div>
@@ -70,5 +76,5 @@ export function TrustSection() {
         </div>
       </div>
     </section>
-  )
+  );
 }

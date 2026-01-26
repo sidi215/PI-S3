@@ -1,30 +1,34 @@
-'use client'
+'use client';
 
-import { motion } from 'framer-motion'
-import { Droplets, TrendingUp, Handshake, Brain } from 'lucide-react'
+import { motion } from 'framer-motion';
+import { Droplets, TrendingUp, Handshake, Brain } from 'lucide-react';
 
 const impacts = [
   {
     icon: <Droplets className="h-8 w-8" />,
     title: "Économie d'eau",
-    description: "Réduction du gaspillage de l'eau grâce à une irrigation optimisée"
+    description:
+      "Réduction du gaspillage de l'eau grâce à une irrigation optimisée",
   },
   {
     icon: <TrendingUp className="h-8 w-8" />,
-    title: "Revenus augmentés",
-    description: "Augmentation des revenus des agriculteurs grâce à la vente directe"
+    title: 'Revenus augmentés',
+    description:
+      'Augmentation des revenus des agriculteurs grâce à la vente directe',
   },
   {
     icon: <Handshake className="h-8 w-8" />,
-    title: "Commerce équitable",
-    description: "Circuits courts et commerce équitable entre producteurs et consommateurs"
+    title: 'Commerce équitable',
+    description:
+      'Circuits courts et commerce équitable entre producteurs et consommateurs',
   },
   {
     icon: <Brain className="h-8 w-8" />,
-    title: "Décisions éclairées",
-    description: "Meilleure prise de décision grâce aux données et à l'intelligence artificielle"
-  }
-]
+    title: 'Décisions éclairées',
+    description:
+      "Meilleure prise de décision grâce aux données et à l'intelligence artificielle",
+  },
+];
 
 export function ImpactSection() {
   return (
@@ -38,11 +42,15 @@ export function ImpactSection() {
           className="text-center mb-12"
         >
           <h2 className="text-3xl font-bold mb-4">
-            Un impact réel sur 
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-600"> l'agriculture locale</span>
+            Un impact réel sur
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-600">
+              {' '}
+              l'agriculture locale
+            </span>
           </h2>
           <p className="text-muted-foreground text-lg max-w-3xl mx-auto">
-            BetterAgri contribue à une agriculture plus durable, plus productive et plus juste en Mauritanie.
+            BetterAgri contribue à une agriculture plus durable, plus productive
+            et plus juste en Mauritanie.
           </p>
         </motion.div>
 
@@ -68,5 +76,5 @@ export function ImpactSection() {
         </div>
       </div>
     </section>
-  )
+  );
 }

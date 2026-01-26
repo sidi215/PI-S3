@@ -1,29 +1,38 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
-import Link from 'next/link'
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import * as z from 'zod'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
-import { Label } from '@/components/ui/label'
-import { Leaf } from 'lucide-react'
-import { useAuthStore } from '@/stores/auth.store'
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { Label } from '@/components/ui/label';
+import { Leaf } from 'lucide-react';
+import { useAuthStore } from '@/stores/auth.store';
 
 const loginSchema = z.object({
-  username: z.string().min(1, 'Le nom d\'utilisateur est requis'),
-  password: z.string().min(6, 'Le mot de passe doit contenir au moins 6 caractères'),
-})
+  username: z.string().min(1, "Le nom d'utilisateur est requis"),
+  password: z
+    .string()
+    .min(6, 'Le mot de passe doit contenir au moins 6 caractères'),
+});
 
-type LoginFormValues = z.infer<typeof loginSchema>
+type LoginFormValues = z.infer<typeof loginSchema>;
 
 export default function LoginPage() {
-  const router = useRouter()
-  const { login, isLoading, error } = useAuthStore()
-  const [loginError, setLoginError] = useState<string | null>(null)
+  const router = useRouter();
+  const { login, isLoading, error } = useAuthStore();
+  const [loginError, setLoginError] = useState<string | null>(null);
 
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
@@ -31,24 +40,24 @@ export default function LoginPage() {
       username: '',
       password: '',
     },
-  })
+  });
 
   async function onSubmit(data: LoginFormValues) {
-    setLoginError(null)
+    setLoginError(null);
     try {
-      await login(data.username, data.password)
-      
+      await login(data.username, data.password);
+
       // Rediriger selon le type d'utilisateur
-      const user = useAuthStore.getState().user
+      const user = useAuthStore.getState().user;
       if (user?.user_type === 'farmer') {
-        router.push('/dashboard/farmer')
+        router.push('/dashboard/farmer');
       } else if (user?.user_type === 'buyer') {
-        router.push('/dashboard/buyer')
+        router.push('/dashboard/buyer');
       } else {
-        router.push('/dashboard/admin')
+        router.push('/dashboard/admin');
       }
     } catch (error: any) {
-      setLoginError(error.message || 'Erreur de connexion')
+      setLoginError(error.message || 'Erreur de connexion');
     }
   }
 
@@ -59,14 +68,12 @@ export default function LoginPage() {
           <div className="mx-auto">
             <Leaf className="h-12 w-12 text-primary" />
           </div>
-          <h1 className="text-2xl font-semibold tracking-tight">
-            Connexion
-          </h1>
+          <h1 className="text-2xl font-semibold tracking-tight">Connexion</h1>
           <p className="text-sm text-muted-foreground">
             Entrez vos identifiants pour accéder à votre compte
           </p>
         </div>
-        
+
         <Card>
           <CardHeader>
             <CardTitle>Accédez à votre compte</CardTitle>
@@ -80,7 +87,7 @@ export default function LoginPage() {
                 {loginError || error}
               </div>
             )}
-            
+
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="username">Nom d'utilisateur</Label>
@@ -91,7 +98,7 @@ export default function LoginPage() {
                   autoComplete="username"
                   autoCorrect="off"
                   disabled={isLoading}
-                  {...form.register("username")}
+                  {...form.register('username')}
                 />
                 {form.formState.errors.username && (
                   <p className="text-sm text-destructive">
@@ -107,7 +114,7 @@ export default function LoginPage() {
                   type="password"
                   autoComplete="current-password"
                   disabled={isLoading}
-                  {...form.register("password")}
+                  {...form.register('password')}
                 />
                 {form.formState.errors.password && (
                   <p className="text-sm text-destructive">
@@ -116,7 +123,7 @@ export default function LoginPage() {
                 )}
               </div>
               <Button className="w-full" type="submit" disabled={isLoading}>
-                {isLoading ? "Connexion..." : "Se connecter"}
+                {isLoading ? 'Connexion...' : 'Se connecter'}
               </Button>
             </form>
           </CardContent>
@@ -130,7 +137,7 @@ export default function LoginPage() {
               </Link>
             </div>
             <div className="text-sm text-muted-foreground">
-              Pas encore de compte ?{" "}
+              Pas encore de compte ?{' '}
               <Link
                 href="/auth/register"
                 className="underline underline-offset-4 hover:text-primary"
@@ -142,5 +149,5 @@ export default function LoginPage() {
         </Card>
       </div>
     </div>
-  )
+  );
 }

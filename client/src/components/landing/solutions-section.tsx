@@ -1,36 +1,37 @@
-'use client'
+'use client';
 
-import { Card, CardContent } from '@/components/ui/card'
-import { motion } from 'framer-motion'
-import { Brain, Cloud, Droplets, ShoppingCart, TrendingUp } from 'lucide-react'
+import { Card, CardContent } from '@/components/ui/card';
+import { motion } from 'framer-motion';
+import { Brain, Cloud, Droplets, ShoppingCart, TrendingUp } from 'lucide-react';
 
 const solutions = [
   {
     icon: <Brain className="h-6 w-6" />,
-    title: "Diagnostic intelligent",
-    description: "Analyse des cultures via photo avec recommandations personnalisées"
+    title: 'Diagnostic intelligent',
+    description:
+      'Analyse des cultures via photo avec recommandations personnalisées',
   },
   {
     icon: <Cloud className="h-6 w-6" />,
-    title: "Alertes météo",
-    description: "Prévisions adaptées à votre région et alertes en temps réel"
+    title: 'Alertes météo',
+    description: 'Prévisions adaptées à votre région et alertes en temps réel',
   },
   {
     icon: <Droplets className="h-6 w-6" />,
     title: "Gestion d'irrigation",
-    description: "Recommandations pour une utilisation optimale de l'eau"
+    description: "Recommandations pour une utilisation optimale de l'eau",
   },
   {
     icon: <ShoppingCart className="h-6 w-6" />,
-    title: "Marketplace direct",
-    description: "Vente directe aux consommateurs sans intermédiaires"
+    title: 'Marketplace direct',
+    description: 'Vente directe aux consommateurs sans intermédiaires',
   },
   {
     icon: <TrendingUp className="h-6 w-6" />,
-    title: "Suivi des performances",
-    description: "Analytique des ventes et optimisation des cultures"
-  }
-]
+    title: 'Suivi des performances',
+    description: 'Analytique des ventes et optimisation des cultures',
+  },
+];
 
 export function SolutionsSection() {
   return (
@@ -44,11 +45,15 @@ export function SolutionsSection() {
           className="text-center mb-12"
         >
           <h2 className="text-3xl font-bold mb-4">
-            Une solution 
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-600 to-emerald-600"> complète, simple et locale</span>
+            Une solution
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-600 to-emerald-600">
+              {' '}
+              complète, simple et locale
+            </span>
           </h2>
           <p className="text-muted-foreground text-lg max-w-3xl mx-auto">
-            Chaque fonctionnalité de BetterAgri répond à un besoin réel des agriculteurs mauritaniens.
+            Chaque fonctionnalité de BetterAgri répond à un besoin réel des
+            agriculteurs mauritaniens.
           </p>
         </motion.div>
 
@@ -67,7 +72,9 @@ export function SolutionsSection() {
                     {solution.icon}
                   </div>
                   <h3 className="font-bold mb-2">{solution.title}</h3>
-                  <p className="text-sm text-muted-foreground">{solution.description}</p>
+                  <p className="text-sm text-muted-foreground">
+                    {solution.description}
+                  </p>
                 </CardContent>
               </Card>
             </motion.div>
@@ -75,5 +82,5 @@ export function SolutionsSection() {
         </div>
       </div>
     </section>
-  )
+  );
 }

@@ -1,53 +1,52 @@
-'use client'
+'use client';
 
-import { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Textarea } from '@/components/ui/textarea'
-import { Label } from '@/components/ui/label'
+} from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Label } from '@/components/ui/label';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select'
-import { Switch } from '@/components/ui/switch'
-import { ArrowLeft, Upload, X } from 'lucide-react'
-import { marketplaceService, CreateProductData } from '@/services/marketplace'
-import { useToast } from '@/hooks/use-toast'
-
+} from '@/components/ui/select';
+import { Switch } from '@/components/ui/switch';
+import { ArrowLeft, Upload, X } from 'lucide-react';
+import { marketplaceService, CreateProductData } from '@/services/marketplace';
+import { useToast } from '@/hooks/use-toast';
 
 type Category = {
-  id: number
-  name: string
-}
+  id: number;
+  name: string;
+};
 
-const UNITS = ['kg', 'g', 'L', 'pièce', 'sac', 'carton']
+const UNITS = ['kg', 'g', 'L', 'pièce', 'sac', 'carton'];
 
 const QUALITY_GRADES = [
   { value: 'premium', label: 'Premium' },
   { value: 'standard', label: 'Standard' },
   { value: 'economy', label: 'Économique' },
-]
+];
 
 export default function NewProductPage() {
-  const router = useRouter()
-  const today = new Date().toISOString().split('T')[0]
-  const { toast } = useToast()
+  const router = useRouter();
+  const today = new Date().toISOString().split('T')[0];
+  const { toast } = useToast();
 
-  const [loading, setLoading] = useState(false)
-  const [images, setImages] = useState<File[]>([])
-  const [previews, setPreviews] = useState<string[]>([])
-  const [categories, setCategories] = useState<Category[]>([])
+  const [loading, setLoading] = useState(false);
+  const [images, setImages] = useState<File[]>([]);
+  const [previews, setPreviews] = useState<string[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
 
   const [formData, setFormData] = useState<CreateProductData>({
     name: '',
@@ -60,7 +59,7 @@ export default function NewProductPage() {
     farm_location: '',
     organic: false,
     quality_grade: 'standard',
-  })
+  });
 
   // =========================
   // Charger les catégories
@@ -68,68 +67,68 @@ export default function NewProductPage() {
   useEffect(() => {
     const loadCategories = async () => {
       try {
-        const data = await marketplaceService.getCategories()
+        const data = await marketplaceService.getCategories();
 
         if (Array.isArray(data?.results)) {
-          setCategories(data.results)
+          setCategories(data.results);
         } else if (Array.isArray(data)) {
-          setCategories(data)
+          setCategories(data);
         } else {
-          setCategories([])
+          setCategories([]);
         }
       } catch (err) {
-        console.error('Erreur chargement catégories:', err)
-        setCategories([])
+        console.error('Erreur chargement catégories:', err);
+        setCategories([]);
       }
-    }
+    };
 
-    loadCategories()
-  }, [])
+    loadCategories();
+  }, []);
 
   // =========================
   // Handlers
   // =========================
   const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    const { name, value } = e.target
+    const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
       [name]:
         name === 'price_per_unit' || name === 'available_quantity'
           ? Number(value)
           : value,
-    }))
-  }
+    }));
+  };
 
   const handleSelectChange = (name: keyof CreateProductData, value: string) => {
     setFormData((prev) => ({
       ...prev,
       [name]: value,
-    }))
-  }
+    }));
+  };
 
   const handleSwitchChange = (checked: boolean) => {
-    setFormData((prev) => ({ ...prev, organic: checked }))
-  }
+    setFormData((prev) => ({ ...prev, organic: checked }));
+  };
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(e.target.files || [])
-    const newImages = [...images, ...files].slice(0, 5)
-    setImages(newImages)
-    setPreviews(newImages.map((f) => URL.createObjectURL(f)))
-  }
+    const files = Array.from(e.target.files || []);
+    const newImages = [...images, ...files].slice(0, 5);
+    setImages(newImages);
+    setPreviews(newImages.map((f) => URL.createObjectURL(f)));
+  };
 
   const removeImage = (index: number) => {
-    setImages(images.filter((_, i) => i !== index))
-    setPreviews(previews.filter((_, i) => i !== index))
-  }
+    setImages(images.filter((_, i) => i !== index));
+    setPreviews(previews.filter((_, i) => i !== index));
+  };
 
   // =========================
   // Submit
   // =========================
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
 
     if (
       !formData.name ||
@@ -137,32 +136,33 @@ export default function NewProductPage() {
       !formData.category_name ||
       images.length === 0
     ) {
-    toast({
-    title: 'Champs manquants',
-    description: 'Veuillez remplir tous les champs obligatoires et ajouter au moins une image.',
-    variant: 'destructive',
-    })
-        return
+      toast({
+        title: 'Champs manquants',
+        description:
+          'Veuillez remplir tous les champs obligatoires et ajouter au moins une image.',
+        variant: 'destructive',
+      });
+      return;
     }
 
-    setLoading(true)
+    setLoading(true);
 
     try {
-      const data = new FormData()
+      const data = new FormData();
 
-      data.append('name', formData.name)
-      data.append('description', formData.description)
-      data.append('category', formData.category_name)
-      data.append('price_per_unit', String(formData.price_per_unit))
-      data.append('available_quantity', String(formData.available_quantity))
-      data.append('unit', formData.unit)
-      data.append('harvest_date', formData.harvest_date || today)
-      data.append('farm_location', formData.farm_location || '')
-      data.append('organic', formData.organic ? 'true' : 'false')
-      data.append('quality_grade', formData.quality_grade || 'standard')
+      data.append('name', formData.name);
+      data.append('description', formData.description);
+      data.append('category', formData.category_name);
+      data.append('price_per_unit', String(formData.price_per_unit));
+      data.append('available_quantity', String(formData.available_quantity));
+      data.append('unit', formData.unit);
+      data.append('harvest_date', formData.harvest_date || today);
+      data.append('farm_location', formData.farm_location || '');
+      data.append('organic', formData.organic ? 'true' : 'false');
+      data.append('quality_grade', formData.quality_grade || 'standard');
 
-      data.append('main_image', images[0])
-      images.slice(1).forEach((img) => data.append('images', img))
+      data.append('main_image', images[0]);
+      images.slice(1).forEach((img) => data.append('images', img));
 
       const response = await fetch(
         'http://127.0.0.1:8000/api/marketplace/products/',
@@ -172,34 +172,32 @@ export default function NewProductPage() {
             Authorization: `Bearer ${localStorage.getItem('access_token')}`,
           },
           body: data,
-        },
-      )
+        }
+      );
 
       if (!response.ok) {
-        const text = await response.text()
-        throw new Error(text)
+        const text = await response.text();
+        throw new Error(text);
       }
 
       toast({
         title: 'Succès',
         description: 'Produit créé avec succès',
         variant: 'success',
-      })
+      });
 
-      router.push('/dashboard/farmer')
-
+      router.push('/dashboard/farmer');
     } catch (err) {
-      console.error(err)
+      console.error(err);
       toast({
         title: 'Erreur',
         description: 'Erreur lors de la création du produit',
         variant: 'destructive',
-        })
-
+      });
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <div className="container py-8">
@@ -243,27 +241,27 @@ export default function NewProductPage() {
                 />
               </div>
 
-<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <Label>Catégorie *</Label>
-                <Select
-                  value={formData.category_name}
-                  onValueChange={(v) =>
-                    handleSelectChange('category_name', v)
-                  }
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Choisir une catégorie" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {categories.map((c) => (
-                      <SelectItem key={c.id} value={String(c.id)}>
-                        {c.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <Label>Catégorie *</Label>
+                  <Select
+                    value={formData.category_name}
+                    onValueChange={(v) =>
+                      handleSelectChange('category_name', v)
+                    }
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Choisir une catégorie" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {categories.map((c) => (
+                        <SelectItem key={c.id} value={String(c.id)}>
+                          {c.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
 
                 <div>
                   <Label htmlFor="unit">Unité de vente *</Label>
@@ -275,7 +273,7 @@ export default function NewProductPage() {
                       <SelectValue placeholder="Sélectionnez une unité" />
                     </SelectTrigger>
                     <SelectContent>
-                      {UNITS.map(unit => (
+                      {UNITS.map((unit) => (
                         <SelectItem key={unit} value={unit}>
                           {unit}
                         </SelectItem>
@@ -301,7 +299,9 @@ export default function NewProductPage() {
                 </div>
 
                 <div>
-                  <Label htmlFor="available_quantity">Quantité disponible *</Label>
+                  <Label htmlFor="available_quantity">
+                    Quantité disponible *
+                  </Label>
                   <Input
                     id="available_quantity"
                     name="available_quantity"
@@ -332,13 +332,15 @@ export default function NewProductPage() {
                   <Label htmlFor="quality_grade">Qualité</Label>
                   <Select
                     value={formData.quality_grade}
-                    onValueChange={(value) => handleSelectChange('quality_grade', value)}
+                    onValueChange={(value) =>
+                      handleSelectChange('quality_grade', value)
+                    }
                   >
                     <SelectTrigger>
                       <SelectValue placeholder="Sélectionnez la qualité" />
                     </SelectTrigger>
                     <SelectContent>
-                      {QUALITY_GRADES.map(grade => (
+                      {QUALITY_GRADES.map((grade) => (
                         <SelectItem key={grade.value} value={grade.value}>
                           {grade.label}
                         </SelectItem>
@@ -349,7 +351,9 @@ export default function NewProductPage() {
               </div>
 
               <div>
-                <Label htmlFor="farm_location">Localisation de la ferme *</Label>
+                <Label htmlFor="farm_location">
+                  Localisation de la ferme *
+                </Label>
                 <Input
                   id="farm_location"
                   name="farm_location"
@@ -367,7 +371,9 @@ export default function NewProductPage() {
                 <Switch
                   id="organic"
                   checked={formData.organic}
-                  onCheckedChange={(checked) => handleSwitchChange('organic', checked)}
+                  onCheckedChange={(checked) =>
+                    handleSwitchChange('organic', checked)
+                  }
                 />
                 <Label htmlFor="organic">Produit biologique</Label>
               </div>
@@ -398,7 +404,7 @@ export default function NewProductPage() {
                       </div>
                     ))}
                   </div>
-                  
+
                   <Label
                     htmlFor="images"
                     className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed rounded-lg cursor-pointer hover:bg-accent"
@@ -418,7 +424,8 @@ export default function NewProductPage() {
                     />
                   </Label>
                   <p className="text-xs text-muted-foreground mt-2">
-                    Téléchargez au moins 1 image. La première sera l'image principale.
+                    Téléchargez au moins 1 image. La première sera l'image
+                    principale.
                   </p>
                 </div>
               </div>
@@ -441,5 +448,5 @@ export default function NewProductPage() {
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }
