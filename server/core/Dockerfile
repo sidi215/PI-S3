@@ -13,6 +13,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
+ENV DJANGO_SETTINGS_MODULE=betteragri.settings.development
+
 # Collect static files
 RUN python manage.py collectstatic --noinput
 
