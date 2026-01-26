@@ -243,6 +243,7 @@ yarn-error.log*
 server/ai_service/training/dataset/
 server/ai_service/app/models/*.h5
 
-# Media files
-mediafiles/products/*
-mediafiles/products/main
+# Django media files
+mediafiles/
+media/
+
