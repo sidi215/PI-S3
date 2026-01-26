@@ -20,5 +20,5 @@ async def run_inference(file):
 
     return {
         "label": LABELS[str(idx)],
-        "confidence": round(float(preds[idx]) * 100, 2)
+        "confidence": round(float(preds[idx]) * 100, 2),
     }

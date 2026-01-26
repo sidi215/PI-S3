@@ -2,4 +2,10 @@ from django.apps import AppConfig
 
 
 class DiagnosisConfig(AppConfig):
-    name = 'diagnosis'
+ 
+    default_auto_field = 'django.db.models.BigAutoField'
+    name = 'apps.diagnosis'
+
+
+    def ready(self):
+        import apps.diagnosis.signals
