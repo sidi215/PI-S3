@@ -1,0 +1,89 @@
+version: '3.8'
+
+services:
+  # PostgreSQL pour Django
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_DB: betteragri
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./backend/initdb:/docker-entrypoint-initdb.d
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  # Backend Django
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    command: >
+      sh -c "python manage.py migrate &&
+             python manage.py collectstatic --noinput &&
+             python manage.py runserver 0.0.0.0:8000"
+    volumes:
+      - ./backend:/app
+      - static_volume:/app/staticfiles
+      - media_volume:/app/mediafiles
+      - ./backend/vapid_keys.json:/app/vapid_keys.json
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgres://postgres:postgres@postgres:5432/betteragri
+      - DJANGO_SETTINGS_MODULE=core.betteragri.settings.development
+      - PYTHONUNBUFFERED=1
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+    stdin_open: true
+    tty: true
+
+  # AI services (FastAPI)
+  ai_services:
+    build:
+      context: ./ai_services
+      dockerfile: Dockerfile
+    volumes:
+      - ./ai_services/app:/app/app
+    ports:
+      - "9000:8000"
+    restart: unless-stopped
+
+  # Frontend Next.js
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    volumes:
+      - ./frontend:/app
+    ports:
+      - "3000:3000"
+    command: npm run dev
+    restart: unless-stopped
+
+  # Nginx pour servir static et media Django
+  nginx:
+    image: nginx:alpine
+    volumes:
+      - ./infrastructure/nginx/nginx.conf:/etc/nginx/nginx.conf
+      - static_volume:/static
+      - media_volume:/media
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+  static_volume:
+  media_volume:
