@@ -1,4 +1,3 @@
-// services/reviews.ts (nouveau)
 import { api } from '@/lib/api';
 
 export interface FarmerReview {

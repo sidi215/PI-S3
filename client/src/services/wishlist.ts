@@ -1,4 +1,3 @@
-// services/wishlist.ts
 import { api } from '@/lib/api';
 
 export interface WishlistItem {

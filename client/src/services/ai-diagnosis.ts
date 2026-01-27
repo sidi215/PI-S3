@@ -1,7 +1,6 @@
-// services/ai-diagnosis.ts
 import axios from 'axios';
 
-const AI_SERVICE_URL = 'http://localhost:8001'; // URL de votre service FastAPI
+const AI_SERVICE_URL = 'http://localhost:8001'; // URL du service FastAPI
 
 export interface DiagnosisResult {
   model_version: string;

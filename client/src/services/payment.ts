@@ -1,4 +1,3 @@
-// services/payment.ts (nouveau)
 import { api } from '@/lib/api';
 
 export interface Payment {

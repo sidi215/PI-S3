@@ -1,5 +1,4 @@
-// services/marketplace.ts
-import { api } from '@/lib/api'; // Assurez-vous que api est correctement configuré
+import { api } from '@/lib/api'; 
 
 export interface Product {
   id: number;
@@ -11,7 +10,7 @@ export interface Product {
   unit: string;
   images: string[];
   farmer: number;
-  status: string; // 'draft', 'active', 'inactive', 'sold_out'
+  status: string; 
   harvest_date: string;
   farm_location: string;
   organic: boolean;
@@ -24,16 +23,16 @@ export interface Product {
 export interface CreateProductData {
   name: string;
   description: string;
-  category_name: string; // Ce devrait être l'ID ou le nom de la catégorie
+  category_name: string; 
   price_per_unit: number;
   available_quantity: number;
   unit: string;
-  harvest_date?: string; // Format: YYYY-MM-DD
+  harvest_date?: string; 
   farm_location?: string;
   organic?: boolean;
   quality_grade?: string;
-  main_image?: File; // Image principale obligatoire
-  images?: File[]; // Images supplémentaires
+  main_image?: File; 
+  images?: File[];
 }
 export const marketplaceService = {
   getAllProducts: async (params?: any) => {

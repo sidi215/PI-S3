@@ -1,4 +1,3 @@
-// services/cart.ts (nouveau)
 import { api } from '@/lib/api';
 
 export interface CartItem {

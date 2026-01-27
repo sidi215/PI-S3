@@ -1,9 +1,4 @@
-// services/messaging.ts
 import { api } from '@/lib/api';
-
-/* =======================
-   TYPES
-======================= */
 
 export interface ConversationParticipant {
   id: number;
@@ -50,14 +45,7 @@ export interface Notification {
   created_at: string;
 }
 
-/* =======================
-   SERVICE
-======================= */
-
 class MessagingService {
-  /* ---------- Conversations ---------- */
-
-  /** Toutes les conversations de l'utilisateur connecté */
   async getConversations(role?: 'farmer' | 'buyer'): Promise<Conversation[]> {
     try {
       const response = await api.get('/messaging/conversations/', {
@@ -112,7 +100,7 @@ class MessagingService {
     return this.createConversation([farmerId], orderId, productId);
   }
 
-  /* ---------- Messages ---------- */
+  /* Messages */
 
   async getMessages(conversationId: number): Promise<Message[]> {
     if (!conversationId) return [];
@@ -157,7 +145,7 @@ class MessagingService {
     return response.data?.unread_count ?? 0;
   }
 
-  /* ---------- Notifications ---------- */
+  /* Notifications */
 
   async getNotifications(): Promise<Notification[]> {
     try {
