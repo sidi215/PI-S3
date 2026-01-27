@@ -81,7 +81,7 @@ export function HeroSection() {
             <div className="relative h-[400px] lg:h-[500px] rounded-2xl overflow-hidden shadow-2xl border border-gray-200 dark:border-gray-800">
               {/* Image */}
               <Image
-                src="/Farmer.jpg"
+                src="/farmer3.jpg"
                 alt="Agriculteur utilisant la plateforme BetterAgri en Mauritanie"
                 fill
                 className="object-cover"
