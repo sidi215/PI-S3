@@ -20,9 +20,7 @@ from .tasks import fetch_weather_data
 class WeatherViewSet(viewsets.ViewSet):
     permission_classes = [IsAuthenticated]
 
-    # =============================
-    # 🌍 MAURITANIE – météo par ville
-    # =============================
+    # MAURITANIE – météo par ville
     @action(detail=False, methods=["post"])
     def mauritania_weather(self, request):
         city = request.data.get("city")
@@ -35,17 +33,13 @@ class WeatherViewSet(viewsets.ViewSet):
         data = service.get_weather_for_city(city)
         return Response(data)
 
-    # =============================
-    # 🌍 villes supportées
-    # =============================
+    # villes supportées
     @action(detail=False, methods=["get"])
     def get_supported_cities(self, request):
         service = MauritaniaWeatherService()
         return Response(service.get_supported_cities())
 
-    # =============================
-    # ☁️ météo actuelle (GET)
-    # =============================
+    # météo actuelle (GET)
     @action(detail=False, methods=["get"])
     def current(self, request):
         lat = request.query_params.get("lat")
@@ -97,9 +91,7 @@ class WeatherViewSet(viewsets.ViewSet):
 
         return Response(WeatherDataSerializer(weather).data)
 
-    # =============================
-    # 📅 prévisions
-    # =============================
+    # prévisions
     @action(detail=False, methods=["get"])
     def forecast(self, request):
         lat = request.query_params.get("lat")
@@ -114,9 +106,7 @@ class WeatherViewSet(viewsets.ViewSet):
         service = WeatherService()
         return Response(service.get_forecast(float(lat), float(lon)))
 
-    # =============================
-    # 🔔 alertes agriculteur
-    # =============================
+    # alertes agriculteur
     @action(detail=False, methods=["get"])
     def alerts(self, request):
         if request.user.user_type != "farmer":
@@ -131,9 +121,7 @@ class WeatherViewSet(viewsets.ViewSet):
 
         return Response(WeatherAlertSerializer(alerts, many=True).data)
 
-    # =============================
-    # ✅ marquer alerte lue
-    # =============================
+    # marquer alerte lue
     @action(detail=False, methods=["post"])
     def mark_alert_read(self, request):
         alert_id = request.data.get("alert_id")

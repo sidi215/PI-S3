@@ -3,7 +3,7 @@ from django.utils import timezone
 from decimal import Decimal
 
 from .models import Order, OrderItem, Cart, CartItem
-from apps.marketplace.models import Product  # Corrigé: apps.marketplace
+from apps.marketplace.models import Product  
 from apps.marketplace.serializers import ProductSerializer
 from apps.accounts.serializers import UserSerializer
 

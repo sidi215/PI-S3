@@ -3,9 +3,7 @@ from .models import Payment, Transaction, Payout
 from apps.orders.models import Order
 from apps.orders.serializers import OrderSerializer
 
-# =========================
 # PAYMENT SERIALIZERS
-# =========================
 
 
 class PaymentSerializer(serializers.ModelSerializer):
@@ -93,10 +91,7 @@ class PaymentCreateSerializer(serializers.Serializer):
         return attrs
 
 
-# =========================
 # WEBHOOK
-# =========================
-
 
 class PaymentWebhookSerializer(serializers.Serializer):
     payment_id = serializers.CharField(required=True)
@@ -105,10 +100,7 @@ class PaymentWebhookSerializer(serializers.Serializer):
     metadata = serializers.JSONField(required=False, default=dict)
 
 
-# =========================
 # PAYOUT SERIALIZERS
-# =========================
-
 
 class PayoutSerializer(serializers.ModelSerializer):
     farmer = serializers.StringRelatedField(read_only=True)

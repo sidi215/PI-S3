@@ -10,29 +10,29 @@ router.register(r"alerts", WeatherAlertViewSet, basename="weather-alert")
 
 urlpatterns = [
     path("", include(router.urls)),
-    # 🔥 météo par ville (utilisé par frontend)
+    # météo par ville (utilisé par frontend)
     path(
         "mauritania/",
         WeatherViewSet.as_view({"post": "mauritania_weather"}),
         name="mauritania-weather",
     ),
-    # 🔥 liste des villes
+    # liste des villes
     path(
         "mauritania/cities/",
         WeatherViewSet.as_view({"get": "get_supported_cities"}),
         name="mauritania-cities",
     ),
-    # 🔥 météo actuelle (GET)
+    # météo actuelle (GET)
     path(
         "current/", WeatherViewSet.as_view({"get": "current"}), name="current-weather"
     ),
-    # 🔥 prévisions
+    # prévisions
     path(
         "forecast/",
         WeatherViewSet.as_view({"get": "forecast"}),
         name="weather-forecast",
     ),
-    # 🔔 alertes
+    # alertes
     path("alerts/", WeatherViewSet.as_view({"get": "alerts"}), name="weather-alerts"),
     path(
         "mark-alert-read/",

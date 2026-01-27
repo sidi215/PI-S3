@@ -1,4 +1,3 @@
-# apps/analytics/serializers.py - Version simplifiée
 from rest_framework import serializers
 from .models import FarmerAnalytics
 from apps.accounts.serializers import UserSerializer

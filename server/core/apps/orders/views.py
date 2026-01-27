@@ -22,7 +22,7 @@ from apps.reviews.models import FarmerReview
 from apps.marketplace.models import Product, ProductReview
 
 
-# ==================== CART VIEWSET ====================
+# CART VIEWSET
 class CartViewSet(viewsets.ModelViewSet):
     serializer_class = CartSerializer
     permission_classes = [IsAuthenticated]
@@ -77,7 +77,7 @@ class CartViewSet(viewsets.ModelViewSet):
         )
 
 
-# ==================== CART ITEM VIEWSET ====================
+# CART ITEM VIEWSET
 class CartItemViewSet(viewsets.ModelViewSet):
     serializer_class = CartItemSerializer
     permission_classes = [IsAuthenticated]
@@ -139,7 +139,7 @@ class CartItemViewSet(viewsets.ModelViewSet):
         )
 
 
-# ==================== ORDER VIEWSET ====================
+# ORDER VIEWSET
 class OrderViewSet(viewsets.ModelViewSet):
     serializer_class = OrderSerializer
     permission_classes = [IsAuthenticated]
@@ -241,7 +241,6 @@ class OrderViewSet(viewsets.ModelViewSet):
     def _calculate_shipping_fee(self, data):
         """Calculer les frais de livraison"""
         # Pour la démo: frais fixes
-        # En production, utiliser une API de livraison
         return Decimal("10.00")
 
     def _calculate_tax(self, amount):
@@ -474,7 +473,7 @@ class OrderViewSet(viewsets.ModelViewSet):
         return Response(stats)
 
 
-# ==================== FARMER ORDER VIEWSET ====================
+# FARMER ORDER VIEWSET
 class FarmerOrderViewSet(viewsets.ReadOnlyModelViewSet):
     """
     Vue spécifique pour les agriculteurs pour gérer leurs commandes.
@@ -487,11 +486,11 @@ class FarmerOrderViewSet(viewsets.ReadOnlyModelViewSet):
         # Retourner uniquement les commandes contenant des produits de l'agriculteur
         user = self.request.user
 
-        # Acheteur → ses commandes
+        # Acheteur -> ses commandes
         if user.user_type == "buyer":
             return Order.objects.filter(buyer=user).order_by("-ordered_at")
 
-        # Agriculteur → commandes qui contiennent SES produits
+        # Agriculteur -> commandes qui contiennent SES produits
         if user.user_type == "farmer":
             return (
                 Order.objects.filter(items__product__farmer=user)
@@ -511,10 +510,10 @@ class FarmerOrderViewSet(viewsets.ReadOnlyModelViewSet):
 
         orders = Order.objects.filter(items__product__farmer=farmer).distinct()
 
-        # 📦 Produits actifs
+        # Produits actifs
         active_products = Product.objects.filter(farmer=farmer, status="active").count()
 
-        # ⭐ Avis sur les produits du fermier
+        # Avis sur les produits du fermier
         reviews = ProductReview.objects.filter(product__farmer=farmer)
 
         average_rating = reviews.aggregate(avg=Avg("rating"))["avg"] or 0
@@ -530,7 +529,7 @@ class FarmerOrderViewSet(viewsets.ReadOnlyModelViewSet):
                 total=Sum("items__total_price")
             )["total"]
             or 0,
-            # ✅ NOUVEAUX CHAMPS
+            # NOUVEAUX CHAMPS
             "average_rating": round(average_rating, 2),
             "active_products": active_products,
         }

@@ -260,7 +260,7 @@ class PaymentTestView(generics.GenericAPIView):
         )
 
 
-# ==================== PAYOUT VIEWSET ====================
+# PAYOUT VIEWSET
 class PayoutViewSet(viewsets.ModelViewSet):
     """
     ViewSet pour les paiements aux agriculteurs.

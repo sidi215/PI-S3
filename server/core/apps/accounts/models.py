@@ -111,7 +111,7 @@ class User(AbstractUser):
         message="Numéro de téléphone invalide. Format: +222XXXXXXXX ou 00222XXXXXXXX (8 chiffres)",
     )
 
-    # === Champs de base ===============================================
+    # Champs de base
     user_type = models.CharField(
         max_length=10,
         choices=UserType.choices,
@@ -126,7 +126,7 @@ class User(AbstractUser):
         verbose_name="Numéro de téléphone",
     )
 
-    # === Localisation =================================================
+    # Localisation
     wilaya = models.CharField(
         max_length=50, choices=WILAYAS, blank=True, verbose_name="Wilaya"
     )
@@ -145,7 +145,7 @@ class User(AbstractUser):
         max_digits=9, decimal_places=6, null=True, blank=True, verbose_name="Longitude"
     )
 
-    # === Profil utilisateur ===========================================
+    # Profil utilisateur
     profile_picture = models.ImageField(
         upload_to="profile_pictures/%Y/%m/%d/",
         blank=True,
@@ -170,7 +170,7 @@ class User(AbstractUser):
         verbose_name="Genre",
     )
 
-    # === Champs spécifiques aux agriculteurs ==========================
+    # Champs spécifiques aux agriculteurs
     farm_name = models.CharField(
         max_length=200, blank=True, verbose_name="Nom de la ferme/exploitation"
     )

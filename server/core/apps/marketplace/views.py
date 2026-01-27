@@ -20,7 +20,7 @@ from .permissions import IsFarmerOrReadOnly, IsProductOwner
 from apps.notifications.utils import send_product_notification
 
 
-# ==================== CATEGORY VIEWSET ====================
+# CATEGORY VIEWSET
 class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
     """
     ViewSet pour les catégories de produits.
@@ -88,7 +88,7 @@ class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
         return Response(serializer.data)
 
 
-# ==================== PRODUCT VIEWSET ====================
+# PRODUCT VIEWSET
 class ProductViewSet(viewsets.ModelViewSet):
     """
     ViewSet pour les produits.
@@ -322,7 +322,7 @@ class ProductViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 
-# ==================== PRODUCT REVIEW VIEWSET ====================
+# PRODUCT REVIEW VIEWSET
 class ProductReviewViewSet(viewsets.ModelViewSet):
     """
     ViewSet pour les avis sur les produits.
@@ -381,7 +381,7 @@ class ProductReviewViewSet(viewsets.ModelViewSet):
         )
 
 
-# ==================== WISHLIST VIEWSET ====================
+# WISHLIST VIEWSET
 class WishlistViewSet(viewsets.ModelViewSet):
     """
     ViewSet pour la liste de souhaits des utilisateurs.
@@ -410,7 +410,7 @@ class WishlistViewSet(viewsets.ModelViewSet):
         return Response({"count": count})
 
 
-# ==================== VIEWS ADDITIONNELLES ====================
+# VIEWS ADDITIONNELLES
 class ProductSearchView(generics.ListAPIView):
     """
     Vue de recherche avancée pour les produits.

@@ -38,7 +38,6 @@ def check_and_send_alerts():
 
         for weather in recent_weather:
             # Vérifier les conditions d'alerte
-            # (implémenter la logique spécifique)
             pass
 
         return "Alerts checked successfully"

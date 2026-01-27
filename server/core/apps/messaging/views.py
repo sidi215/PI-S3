@@ -18,9 +18,7 @@ from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
 
 
-# =====================================================
 # CONVERSATIONS
-# =====================================================
 class ConversationViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
 
@@ -108,9 +106,7 @@ class ConversationViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 
-# =====================================================
 # MESSAGES
-# =====================================================
 class MessageViewSet(viewsets.ModelViewSet):
     serializer_class = MessageSerializer
     permission_classes = [IsAuthenticated]
@@ -187,9 +183,7 @@ class MessageViewSet(viewsets.ModelViewSet):
         return Response({"unread_count": count})
 
 
-# =====================================================
 # NOTIFICATIONS
-# =====================================================
 class NotificationViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = NotificationSerializer
     permission_classes = [IsAuthenticated]

@@ -16,7 +16,7 @@ from .serializers import (
 from .services import WebPushService, ServiceWorkerService
 
 
-# ==================== NOTIFICATION VIEWSET ====================
+# NOTIFICATION VIEWSET
 class NotificationViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = NotificationSerializer
     permission_classes = [IsAuthenticated]
@@ -66,7 +66,7 @@ class NotificationViewSet(viewsets.ReadOnlyModelViewSet):
         return Response(serializer.data)
 
 
-# ==================== NOTIFICATION PREFERENCE VIEWSET ====================
+# NOTIFICATION PREFERENCE VIEWSET
 class NotificationPreferenceViewSet(viewsets.ModelViewSet):
     serializer_class = NotificationPreferenceSerializer
     permission_classes = [IsAuthenticated]
@@ -110,7 +110,7 @@ class NotificationPreferenceViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 
-# ==================== PUSH SUBSCRIPTION VIEWSET ====================
+# PUSH SUBSCRIPTION VIEWSET
 class PushSubscriptionViewSet(viewsets.ModelViewSet):
     serializer_class = PushSubscriptionSerializer
     permission_classes = [IsAuthenticated]
@@ -134,7 +134,7 @@ class PushSubscriptionViewSet(viewsets.ModelViewSet):
         return Response({"message": "Désabonné de toutes les notifications push"})
 
 
-# ==================== SERVICE WORKER & MANIFEST VIEWS ====================
+# SERVICE WORKER & MANIFEST VIEWS
 class ServiceWorkerView(APIView):
     """Vue pour servir le Service Worker"""
 
@@ -176,7 +176,7 @@ class VapidPublicKeyView(APIView):
         return JsonResponse({"public_key": webpush_service.get_vapid_public_key()})
 
 
-# ==================== TEST NOTIFICATION VIEW ====================
+# TEST NOTIFICATION VIEW
 class TestNotificationView(generics.GenericAPIView):
     """Vue pour tester les notifications"""
 

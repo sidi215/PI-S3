@@ -121,11 +121,18 @@ class PasswordResetRequestView(generics.GenericAPIView):
         serializer.is_valid(raise_exception=True)
 
         email = serializer.validated_data["email"]
-        user = User.objects.get(email=email)
-
-        send_password_reset_email(user)
+        try:
+            user = User.objects.get(email=email)
+            send_password_reset_email(user)
+        except User.DoesNotExist:
+            pass  
 
         return Response({"message": "Email de réinitialisation envoyé."})
+
+
+from django.utils.http import urlsafe_base64_decode
+from django.utils.encoding import force_str
+from django.contrib.auth.tokens import PasswordResetTokenGenerator
 
 
 class PasswordResetConfirmView(generics.GenericAPIView):
@@ -137,24 +144,33 @@ class PasswordResetConfirmView(generics.GenericAPIView):
         serializer.is_valid(raise_exception=True)
 
         token = serializer.validated_data["token"]
+        new_password = serializer.validated_data["new_password"]
 
-        # Verify token (simplified - in production use a proper token verification)
         try:
-            uid = force_str(urlsafe_base64_decode(token.split(".")[0]))
+            uidb64, token_part = token.split(".")
+            uid = force_str(urlsafe_base64_decode(uidb64))
             user = User.objects.get(pk=uid)
 
-            if PasswordResetTokenGenerator().check_token(user, token.split(".")[1]):
-                user.set_password(serializer.validated_data["new_password"])
-                user.save()
-                return Response({"message": "Mot de passe réinitialisé avec succès."})
-            else:
+            token_generator = PasswordResetTokenGenerator()
+
+            if not token_generator.check_token(user, token_part):
                 return Response(
                     {"error": "Token invalide ou expiré."},
                     status=status.HTTP_400_BAD_REQUEST,
                 )
-        except (User.DoesNotExist, ValueError, IndexError):
+
+            user.set_password(new_password)
+            user.save()
+
             return Response(
-                {"error": "Token invalide."}, status=status.HTTP_400_BAD_REQUEST
+                {"message": "Mot de passe réinitialisé avec succès."},
+                status=status.HTTP_200_OK,
+            )
+
+        except Exception:
+            return Response(
+                {"error": "Token invalide."},
+                status=status.HTTP_400_BAD_REQUEST,
             )
 
 

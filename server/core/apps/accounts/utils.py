@@ -37,30 +37,32 @@ def send_verification_email(user):
         fail_silently=False,
     )
 
-
 def send_password_reset_email(user):
     token_generator = PasswordResetTokenGenerator()
     token = token_generator.make_token(user)
     uid = urlsafe_base64_encode(force_bytes(user.pk))
     reset_token = f"{uid}.{token}"
 
-    reset_url = f"{settings.FRONTEND_URL}/reset-password/{reset_token}"
+    reset_url = (
+        f"{settings.FRONTEND_URL}/auth/password-reset/confirm"
+        f"?token={reset_token}"
+    )
 
     subject = "Réinitialisation de mot de passe - BetterAgri"
     message = f"""
     Bonjour {user.first_name},
-    
+
     Vous avez demandé la réinitialisation de votre mot de passe.
     Cliquez sur le lien suivant pour créer un nouveau mot de passe:
-    
+
     {reset_url}
-    
+
     Ce lien expirera dans 24 heures.
-    
+
     Si vous n'avez pas fait cette demande, ignorez cet email.
-    
+
     Cordialement,
-    L'équipe BetterAgri
+    L'équipe BetterAgri 
     """
 
     send_mail(

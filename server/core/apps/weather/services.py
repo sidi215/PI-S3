@@ -92,11 +92,9 @@ class MauritaniaWeatherService:
     def _get_weather_data(self, lat, lon, city_name):
         """Obtenir les données météo"""
 
-        # Si pas de clé API ou mode test, utiliser données simulées
         if not self.api_key or self.api_key.startswith("test_"):
             return self._get_mock_weather(lat, lon, city_name)
 
-        # Sinon appeler OpenWeatherMap
         try:
             url = f"{self.base_url}/weather"
             params = {
@@ -140,7 +138,7 @@ class MauritaniaWeatherService:
             "sunset": now + timedelta(hours=6),
             "recorded_at": now,
             "precipitation": round(self.mock_data["precipitation"], 1),
-            "uv_index": random.randint(5, 12),  # Élevé en Mauritanie
+            "uv_index": random.randint(5, 12),
             "hourly_forecast": [],
             "daily_forecast": [],
             "soil_moisture": round(random.uniform(10, 60), 1),
