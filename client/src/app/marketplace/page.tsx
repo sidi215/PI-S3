@@ -114,7 +114,7 @@ export default function MarketplacePage() {
     'Inchiri',
   ];
 
-  /* ===================== LOAD DATA ===================== */
+  /* LOAD DATA */
   useEffect(() => {
     const loadData = async () => {
       try {
@@ -200,7 +200,7 @@ export default function MarketplacePage() {
     }
   };
 
-  /* ===================== ACTION ===================== */
+  /* ACTION */
   const handleAddToCart = (product: Product) => {
     if (!user) {
       router.push('/auth/login');

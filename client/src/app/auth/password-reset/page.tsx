@@ -44,7 +44,7 @@ export default function PasswordResetPage() {
 
     try {
       const response = await fetch(
-        'http://localhost:8000/api/accounts/password-reset/',
+        'http://localhost:8000/api/auth/password-reset/',
         {
           method: 'POST',
           headers: {

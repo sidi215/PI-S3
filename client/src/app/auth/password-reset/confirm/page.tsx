@@ -39,6 +39,7 @@ const resetConfirmSchema = z
     path: ['confirm_password'],
   });
 
+  
 type ResetConfirmFormValues = z.infer<typeof resetConfirmSchema>;
 
 export default function PasswordResetConfirmPage() {
@@ -58,6 +59,7 @@ export default function PasswordResetConfirmPage() {
     }
   }, [searchParams]);
 
+  
   const form = useForm<ResetConfirmFormValues>({
     resolver: zodResolver(resetConfirmSchema),
     defaultValues: {
@@ -81,7 +83,7 @@ export default function PasswordResetConfirmPage() {
 
     try {
       const response = await fetch(
-        'http://localhost:8000/api/accounts/password-reset/confirm/',
+        'http://localhost:8000/api/auth/password-reset/confirm/',
         {
           method: 'POST',
           headers: {
@@ -90,6 +92,7 @@ export default function PasswordResetConfirmPage() {
           body: JSON.stringify({
             token: data.token,
             new_password: data.new_password,
+            new_password2: data.confirm_password,
           }),
         }
       );
@@ -102,7 +105,7 @@ export default function PasswordResetConfirmPage() {
 
         // Rediriger vers la page de connexion après 3 secondes
         setTimeout(() => {
-          router.push('/auth/login');
+          router.replace('/auth/login');
         }, 3000);
       } else {
         setError(
